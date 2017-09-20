@@ -1,0 +1,5 @@
+<ul class="user-list">
+  <li class="user-list-item" *ngFor="let user of users" (click)="selectUser(user.id)">
+    <div>{{user.id}}: {{user.userName}}</div>
+  </li>
+</ul>
