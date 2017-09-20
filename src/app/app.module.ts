@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
@@ -14,6 +13,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { ApplicationState } from "app/core/store/application-state";
 import { UiState } from "app/core/store/ui-state";
 import { LoadUsersEffectService } from "app/core/store/effects/load-users-effect.service";
+import { CommonModule } from "@angular/common";
 
 const reducers = {
   uiState: uiState,
