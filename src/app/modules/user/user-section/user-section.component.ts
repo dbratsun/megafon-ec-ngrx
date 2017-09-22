@@ -10,7 +10,7 @@ import * as _ from 'lodash';
 @Component({
   selector: 'user-section',
   templateUrl: './user-section.component.html',
-  styleUrls: ['./user-section.component.css']
+  styleUrls: ['./user-section.component.scss']
 })
 export class UserSectionComponent implements OnInit {
 

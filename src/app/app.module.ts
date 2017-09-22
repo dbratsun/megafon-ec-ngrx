@@ -14,6 +14,7 @@ import { ApplicationState } from "app/core/store/application-state";
 import { UiState } from "app/core/store/ui-state";
 import { LoadUsersEffectService } from "app/core/store/effects/load-users-effect.service";
 import { CommonModule } from "@angular/common";
+import { CoreModule } from './core/core.module';
 
 const reducers = {
   uiState: uiState,
@@ -40,6 +41,7 @@ function logger(reducer: ActionReducer<ApplicationState>) {
     CommonModule,
     HttpModule,
     ModulesModule,
+    CoreModule,
     StoreModule.forRoot(reducers, { }),
     // EffectsModule.run(LoadUsersEffectService)
     EffectsModule.forRoot([LoadUsersEffectService])
