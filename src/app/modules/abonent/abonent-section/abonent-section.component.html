@@ -1,0 +1,7 @@
+<div class="abonent-section">
+  <div class="abonent-section-header">
+    <span><h3>Abonent Count: {{abonentCount$ | async}}</h3></span>
+  </div>
+  <abonent-list [abonents]="abonents$ | async" [currentSelectedAbonentId]="currentSelectedAbonentId$ | async" 
+    (abonentSelected)="onAbonentSelected($event)"></abonent-list>
+</div>

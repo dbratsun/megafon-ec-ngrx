@@ -1,8 +1,10 @@
 export interface UiState {
-    currentUserId: number
+    currentUserId: number;
+    currentAbonentId: number;
 }
 
 export const INITIAL_UI_STATE: UiState = {
-    currentUserId: undefined
+    currentUserId: undefined,
+    currentAbonentId: undefined
 }
 

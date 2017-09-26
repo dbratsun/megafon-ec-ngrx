@@ -1,0 +1,6 @@
+<ul class="abonent-list">
+  <li class="abonent-list-item" *ngFor="let abonent of abonents" (click)="selectAbonent(abonent.id)" 
+    [ngClass]="{selected: abonent.id == currentSelectedAbonentId}">
+    <div>{{abonent.id}}: {{abonent.name}}</div>
+  </li>
+</ul>

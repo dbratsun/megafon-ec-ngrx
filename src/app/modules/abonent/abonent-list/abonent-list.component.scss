@@ -1,0 +1,17 @@
+.abonent-list {
+    margin: 0;
+    overflow-y: auto;
+    padding: 0;
+}
+
+.abonent-list-item {
+    list-style: none;
+    padding: 12px 14px 14px;
+    cursor: pointer;
+}
+
+.abonent-list-item.selected {
+    background-color: #1976d2;
+    color: white;
+}
+

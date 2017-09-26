@@ -15,10 +15,14 @@ import { UiState } from "app/core/store/ui-state";
 import { LoadUsersEffectService } from "app/core/store/effects/load-users-effect.service";
 import { CommonModule } from "@angular/common";
 import { CoreModule } from './core/core.module';
+import { storeAbonentData } from "app/core/store/reducers/uiStoreAbonentDataReducer";
+import { AbonentService } from "app/shared/services/abonent.service";
+import { LoadAbonentsEffectService } from "app/core/store/effects/load-abonents-effect.service";
 
 const reducers = {
   uiState: uiState,
-  storeData: storeData
+  storeData: storeData,
+  storeAbonentData: storeAbonentData
 }
 
 const combineReducer = combineReducers(reducers);
@@ -44,9 +48,9 @@ function logger(reducer: ActionReducer<ApplicationState>) {
     CoreModule,
     StoreModule.forRoot(reducers, { }),
     // EffectsModule.run(LoadUsersEffectService)
-    EffectsModule.forRoot([LoadUsersEffectService])
+    EffectsModule.forRoot([LoadUsersEffectService, LoadAbonentsEffectService])
   ],  
-  providers: [UserService],
+  providers: [UserService, AbonentService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

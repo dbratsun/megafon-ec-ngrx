@@ -2,5 +2,5 @@
   <div class="user-section-header">
     <span><h3>User Count: {{userCount$ | async}}</h3></span>
   </div>
-  <user-list [users]="users$ | async" (userSelected)="onUserSelected($event)"></user-list>
+  <user-list [users]="users$ | async" [currentSelectedUserId]="currentSelectedUserId$ | async" (userSelected)="onUserSelected($event)"></user-list>
 </div>

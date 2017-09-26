@@ -11,6 +11,9 @@ export class UserListComponent implements OnInit {
   @Input()
   users: UserVM[];
 
+  @Input()
+  currentSelectedUserId: number;
+
   @Output()
   userSelected = new EventEmitter()
 

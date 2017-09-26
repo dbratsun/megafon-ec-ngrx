@@ -16,10 +16,12 @@ export class UserSectionComponent implements OnInit {
 
   users$: Observable<UserVM[]>;
   userCount$: Observable<number>;
+  currentSelectedUserId$: Observable<number>;
 
   constructor(private store: Store<ApplicationState>) { 
     this.users$ = store.select(stateToUserSelector);
     this.userCount$ = store.map(this.mapStateToUserCount);
+    this.currentSelectedUserId$ = store.select(state => state.uiState.currentUserId);
   }
 
   ngOnInit() {
