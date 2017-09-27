@@ -1,0 +1,6 @@
+<ul class="abonent-detail-view">
+  <li class="abonent-detail-view-item" *ngFor="let abonentDetail of abonentDetails">
+      <h5 class="abonent-detail-view-item-date">{{abonentDetail.date | date:'shortDate'}}</h5>
+      <div class="abonent-detail-view-item-description">{{abonentDetail.description}}</div>
+  </li>
+</ul>

@@ -4,10 +4,10 @@ import * as _ from 'lodash';
 import { Abonent } from "shared/model/abonent";
 
 export function stateToAbonentSelector(state: ApplicationState): AbonentVM[] {
-    if (!state.storeAbonentData) {
+    if (!state.storeAbonentsData) {
         return [];
     }
-    const abonents = _.values<Abonent>(state.storeAbonentData.abonents);
+    const abonents = _.values<Abonent>(state.storeAbonentsData.abonents);
     const abonentsVM =  abonents.map(_.partial(mapAbonentToAbonentVM));
     return abonentsVM;
 }

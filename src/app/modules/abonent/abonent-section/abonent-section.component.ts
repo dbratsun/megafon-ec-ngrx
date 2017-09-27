@@ -29,8 +29,8 @@ export class AbonentSectionComponent implements OnInit {
   }
 
   mapStateToAbonentsCount(state: ApplicationState) {
-    if (!state.storeAbonentData) return 0;
-    return _.size(state.storeAbonentData.abonents);  
+    if (!state.storeAbonentsData) return 0;
+    return _.size(state.storeAbonentsData.abonents);  
   }
 
   onAbonentSelected(selectedAbonentId: number) {

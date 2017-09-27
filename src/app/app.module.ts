@@ -4,25 +4,26 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { ModulesModule } from "app/modules/modules.module";
-import { UserService } from "app/shared/services/user.service";
 import { uiState } from "app/core/store/reducers/uiStateReducer";
-import { storeData } from "app/core/store/reducers/uiStoreDataReducer";
 
 import { StoreModule, combineReducers, ActionReducer } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { ApplicationState } from "app/core/store/application-state";
 import { UiState } from "app/core/store/ui-state";
-import { LoadUsersEffectService } from "app/core/store/effects/load-users-effect.service";
 import { CommonModule } from "@angular/common";
 import { CoreModule } from './core/core.module';
-import { storeAbonentData } from "app/core/store/reducers/uiStoreAbonentDataReducer";
-import { AbonentService } from "app/shared/services/abonent.service";
+import { storeAbonentsData, storeAbonentDetailData } from "app/core/store/reducers/uiStoreAbonentDataReducer";
+import { AbonentsService } from "app/shared/services/abonents.service";
 import { LoadAbonentsEffectService } from "app/core/store/effects/load-abonents-effect.service";
+import { AbonentDetailService } from "app/shared/services/abonent-detail.service";
+import { LoadAbonentDetailEffectService } from "app/core/store/effects/load-abonent-detail-effect.service";
+
+import { YaCoreModule } from 'angular2-yandex-maps';
 
 const reducers = {
   uiState: uiState,
-  storeData: storeData,
-  storeAbonentData: storeAbonentData
+  storeAbonentsData: storeAbonentsData,
+  storeAbonentDetailData: storeAbonentDetailData
 }
 
 const combineReducer = combineReducers(reducers);
@@ -48,9 +49,10 @@ function logger(reducer: ActionReducer<ApplicationState>) {
     CoreModule,
     StoreModule.forRoot(reducers, { }),
     // EffectsModule.run(LoadUsersEffectService)
-    EffectsModule.forRoot([LoadUsersEffectService, LoadAbonentsEffectService])
+    EffectsModule.forRoot([LoadAbonentsEffectService, LoadAbonentDetailEffectService])
+    // YaCoreModule.forRoot()
   ],  
-  providers: [UserService, AbonentService],
+  providers: [AbonentsService, AbonentDetailService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
