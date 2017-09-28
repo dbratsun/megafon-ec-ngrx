@@ -18,7 +18,9 @@ import { LoadAbonentsEffectService } from "app/core/store/effects/load-abonents-
 import { AbonentDetailService } from "app/shared/services/abonent-detail.service";
 import { LoadAbonentDetailEffectService } from "app/core/store/effects/load-abonent-detail-effect.service";
 
-import { YaCoreModule } from 'angular2-yandex-maps';
+// import { YaCoreModule } from 'angular2-yandex-maps';
+// import { AgmCoreModule } from '@agm/core';
+import { YandexMapModule } from './core/yandex-map/yandex-map.module';
 
 const reducers = {
   uiState: uiState,
@@ -49,8 +51,10 @@ function logger(reducer: ActionReducer<ApplicationState>) {
     CoreModule,
     StoreModule.forRoot(reducers, { }),
     // EffectsModule.run(LoadUsersEffectService)
-    EffectsModule.forRoot([LoadAbonentsEffectService, LoadAbonentDetailEffectService])
+    EffectsModule.forRoot([LoadAbonentsEffectService, LoadAbonentDetailEffectService]),
     // YaCoreModule.forRoot()
+    // AgmCoreModule.forRoot('AIzaSyBIzVfqrmUKLhY95dxlagwK-8SOZB0Q3tQ')
+    YandexMapModule.forRoot()
   ],  
   providers: [AbonentsService, AbonentDetailService],
   bootstrap: [AppComponent]
