@@ -2,5 +2,12 @@
   <div class="abonent-detail-section-header">
     <span><h3>{{abonentName$ | async}}</h3></span>
   </div>
-  <abonent-detail-view [abonentDetails]="abonentDetails$ | async"></abonent-detail-view>
+  <div class="abonent-detail-section-body">
+    <div class="abonent-detail-section-body-list">
+      <abonent-detail-view [abonentDetails]="abonentDetails$ | async"></abonent-detail-view>
+    </div>
+    <div class="abonent-detail-section-body-map" *ngIf="abonentHasDetails$ | async">
+      <ya-map [latitude]="55.76" [longitude]="37.64" [controls]="['geolocationControl', 'routeEditor', 'trafficControl']" [zoom]="12"></ya-map>
+    </div>   
+  </div> 
 </div>

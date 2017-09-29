@@ -17,20 +17,174 @@ export interface GoogleMap extends MVCObject {
 }
 */  
 
+
+export interface GetOptions {
+    useMapMargin?: boolean;  
+}
+
+export interface PanToOptions {
+    checkZoomRange?: false;
+    delay?: number;
+    duration?: number;
+    flying?: boolean;
+    safe?: boolean;
+    timingFunction?: string;
+    useMapMargin?: boolean;
+}
+
+export interface SetBoundsOptions {
+    checkZoomRange?: false;
+    duration?: number;
+    preciseZoom?: false;
+    timingFunction?: string;
+    useMapMargin?: string;
+    zoomMargin?: number[][]|number[];
+}
+
+export interface SetCenterOptions {
+    checkZoomRange?: false;
+    duration?: number;
+    timingFunction?: string;
+    useMapMargin?: string;
+}
+
+// todo: use SetCenterOptions
+export interface SetGlobalPixelCenterOptions {
+    checkZoomRange?: false;
+    duration?: number;
+    timingFunction?: string;
+    useMapMargin?: string;
+}
+
+export interface SetZoomOptions {
+    checkZoomRange?: false;
+    duration?: number;
+    useMapMargin?: string;  
+}
+
+export type BehaviorsType = 
+    'default'|'drag'|'scrollZoom'|'dblClickZoom'|'multiTouch'|'rightMouseButtonMagnifier'|
+    'leftMouseButtonMagnifier'|'ruler'|'routeEditor';
+
+export type MapType = 'yandex#map'|'yandex#satellite'|'yandex#hybrid';    
+
+export type ControlType = 
+    'fullscreenControl'|'geolocationControl'|'routeEditor'|'rulerControl'|'searchControl'|'trafficControl'|
+    'typeSelector'|'zoomControl'|'smallMapDefaultSet'|'mediumMapDefaultSet'|'largeMapDefaultSet'|'default';
+
+export interface MapState {
+    behaviors?: BehaviorsType[];
+    bounds?: number[][];
+    center?: number[];
+    controls?: ControlType[];
+    margin?: number[][]|number[];
+    type?: MapType;
+    zoom?: number;  
+}
+
+export const DefaultMapState: MapState = {
+    behaviors: ['default'],
+    controls: ['default'],
+    type: 'yandex#map'
+}
+
+export interface MapOptions {
+    autoFitToViewport?: string;
+    avoidFractionalZoom?: boolean;
+    exitFullscreenByEsc?: boolean;
+    fullscreenZIndex?: number;
+    mapAutoFocus?: boolean;  
+    maxAnimationZoomDifference?: number;
+    maxZoom?: number;
+    minZoom?: number;
+    nativeFullscreen?: boolean;
+    // projection ????
+    restrictMapArea?: boolean[][][][]|number[][];
+    suppressMapOpenBlock?: boolean;
+    suppressObsoleteBrowserNotifier?: boolean;
+    yandexMapAutoSwitch?: boolean;
+    yandexMapDisablePoiInteractivity?: boolean;       
+}
+
+export const DefaultMapOptions = {
+    autoFitToViewport: 'ifNull',
+    avoidFractionalZoom: true,
+    exitFullscreenByEsc: true,
+    fullscreenZIndex: 10000,
+    mapAutoFocus: true,
+    maxAnimationZoomDifference: 5,
+    maxZoom: 23,
+    minZoom: 0,
+    nativeFullscreen: false,
+    // projection
+    restrictMapArea: false,
+    suppressMapOpenBlock: false,
+    suppressObsoleteBrowserNotifier: false,
+    yandexMapAutoSwitch: true,
+    yandexMapDisablePoiInteractivity: false  
+}
+
+/*
+export interface MapOptions {
+  zoom?: number;
+  minZoom?: number;
+  maxZoom?: number;
+  center?: any;
+  // center?: LatLng|LatLngLiteral;
+  // type: any;
+  mapTypeId?: string|MapTypeId;
+  controls?: any[];
+}
+*/
+
+/*
+export enum MapTypeId {
+  MAP,
+  HYBRID,
+  SATELLITE
+}
+
+export interface MapStateBehaviors {
+  DEFAULT,
+  DRAG,
+  SCROLLZOOM,
+  DBLCLICKZOOM
+}
+
+export interface MapState {
+  behaviors?: string|MapStateBehaviors[]
+}
+*/
+
 export interface YandexMap extends MVCObject {
-    constructor(el: HTMLElement, opts?: MapOptions): void;
+    constructor(el: HTMLElement, state: MapState, options?: MapOptions): void;
     geoObjects: any;
+
+    getBounds(options?: GetOptions): number[][];
+    getCenter(options?: GetOptions): number[];
+    getGlobalPixelCenter(options?: GetOptions): number[];
+    // getPanoramaManager(): any;  
+    getType(): string;
+    getZoom(): number;
+    panTo(center: number[], options?: PanToOptions);
+    setBounds(bounds: number[][], options?: SetBoundsOptions);
+    setCenter(center: number[], zoom?: number, options?: SetCenterOptions);
+    setGlobalPixelCenter(globalPixelCenter: number[], zoom?: number, options?: SetGlobalPixelCenterOptions);
+    setType(type: string, options?: GetOptions);
+    setZoom(zoom: number, options?: SetZoomOptions);
+
+
     // setCenter(param: any[]): void;
-    setCenter(latLng: LatLng|LatLngLiteral): void;
+    ////setCenter(latLng: LatLng|LatLngLiteral): void;
     // getCenter(): any;
-    getCenter(): LatLng;
+    ////getCenter(): LatLng;
     
     // panTo(points: any[], options: any[]): void;
-    panTo(latLng: LatLng|LatLngLiteral): void;
+    ////panTo(latLng: LatLng|LatLngLiteral): void;
     events: any;
-    removeOverlay(overlay: any): void; 
+    ////removeOverlay(overlay: any): void; 
 
-    setOptions(options: MapOptions): void;
+    ////setOptions(options: MapOptions): void;
 }
 
 /* Google
@@ -214,22 +368,8 @@ export interface MapOptions {
 }
 */
 
-export interface MapOptions {
-    zoom?: number;
-    minZoom?: number;
-    maxZoom?: number;
-    center?: any;
-    // center?: LatLng|LatLngLiteral;
-    // type: any;
-    mapTypeId?: string|MapTypeId;
-    controls?: any[];
-}
 
-export enum MapTypeId {
-    MAP,
-    HYBRID,
-    SATELLITE
-}
+
 
 /* Google
 export interface MapTypeStyle {

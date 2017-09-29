@@ -1,4 +1,22 @@
 .abonent-detail-section {
+    display: flex;
+    flex-direction: column;
     float: left;
-    width: 265px;
+    width: 741px;
+    height: 560px;
+    border: 1px solid rgba(26, 141, 236, 0.38);
+}
+
+.abonent-detail-section-header {
+    margin: 0px 10px;
+}
+
+.abonent-detail-section-body {
+    display: flex;
+    flex-direction: row;
+}
+
+ya-map {
+    height: 500px;
+    width: 570px;
 }

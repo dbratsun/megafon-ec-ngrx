@@ -4,6 +4,7 @@ import {Observer} from 'rxjs/Observer';
 
 import * as mapTypes from './yandex-maps-types';
 import { MapsAPILoader } from './maps-api-loader/maps-api-loader';
+import { SetCenterOptions, GetOptions, PanToOptions } from "./yandex-maps-types";
 
 declare var ymaps: any;
 
@@ -27,11 +28,11 @@ export class YandexMapsAPIWrapper {
     }
     */
 
-    createMap(el: HTMLElement, mapOptions: mapTypes.MapOptions): Promise<void> {
+    createMap(el: HTMLElement, mapState: mapTypes.MapState, mapOptions: mapTypes.MapOptions): Promise<void> {
         let res = this._loader.load().then(() => {
             let create = () => setTimeout(() =>  {
                 if(ymaps.Map)  {
-                const map = new ymaps.Map(el, mapOptions);
+                const map = new ymaps.Map(el, mapState, mapOptions);
                 this._mapResolver(<mapTypes.YandexMap>map);
                 }
                 else{
@@ -51,20 +52,22 @@ export class YandexMapsAPIWrapper {
         });
       }
 
+    /*
     setMapOptions(options: mapTypes.MapOptions) {
         this._map.then((m: mapTypes.YandexMap) => { m.setOptions(options); });
     }
+    */
     
-    setCenter(latLng: mapTypes.LatLngLiteral): Promise<void> {
-        return this._map.then((map: mapTypes.YandexMap) => map.setCenter(latLng));
+    setCenter(center: number[], zoom?: number, options?: SetCenterOptions): Promise<void> {
+        return this._map.then((map: mapTypes.YandexMap) => map.setCenter(center, zoom, options))
     }
-    
-    getCenter(): Promise<mapTypes.LatLng> {
-        return this._map.then((map: mapTypes.YandexMap) => map.getCenter());
+   
+    getCenter(options?: GetOptions): Promise<number[]> {
+        return this._map.then((map: mapTypes.YandexMap) => map.getCenter(options));
     }
-    
-    panTo(latLng: mapTypes.LatLng|mapTypes.LatLngLiteral): Promise<void> {
-        return this._map.then((map) => map.panTo(latLng));
+   
+    panTo(center: number[], options?: PanToOptions): Promise<void> {
+        return this._map.then((map) => map.panTo(center, options));
     }
     
 }

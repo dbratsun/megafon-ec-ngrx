@@ -4,17 +4,20 @@ import { AbonentSectionComponent } from './abonent/abonent-section/abonent-secti
 import { AbonentListComponent } from "./abonent/abonent-list/abonent-list.component";
 import { AbonentDetailSectionComponent } from './abonent/abonent-detail-section/abonent-detail-section.component';
 import { AbonentDetailViewComponent } from './abonent/abonent-detail-view/abonent-detail-view.component';
+import { YandexMapModule } from '../core/yandex-map/yandex-map.module';
 
 const COMPONENTS = [
     AbonentSectionComponent,
     AbonentListComponent,
     AbonentDetailSectionComponent,
     AbonentDetailViewComponent
+    
 ]
 
 @NgModule({
     imports: [
-        CommonModule
+        CommonModule,
+        YandexMapModule.forRoot()
     ],
     declarations: [
         ...COMPONENTS

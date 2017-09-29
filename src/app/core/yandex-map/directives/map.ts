@@ -25,12 +25,16 @@ import { Subscription } from "rxjs/Subscription";
     `
 })
 export class YaMap implements OnChanges, OnInit, OnDestroy {
+    @Input() behaviors: mapTypes.BehaviorsType[] = mapTypes.DefaultMapState.behaviors;
+    @Input() bounds: number[][];
     @Input() longitude: number = 0;
     @Input() latitude: number = 0;
+    @Input() controls: mapTypes.ControlType[] = mapTypes.DefaultMapState.controls;
+    @Input() margin: number[][]|number[];
+    @Input() type: mapTypes.MapType = mapTypes.DefaultMapState.type;
     @Input() zoom: number = 8;
     @Input() minZoom: number;
     @Input() maxZoom: number;
-    @Input() mapTypeId: 'yandex#map'|'yandex#hybrid'|'yandex#satellite'|string = 'yandex#map';
     
     private mapInit: boolean = false;
     private _observableSubscriptions: Subscription[] = [];
@@ -58,6 +62,11 @@ export class YaMap implements OnChanges, OnInit, OnDestroy {
         }
       }
 
+    private _updateMapOptionsChanges(changes: SimpleChanges) {
+        let options: {[propName: string]: any} = {};
+
+    }  
+
     private _updatePosition(changes: SimpleChanges) {
         if (changes['latitude'] == null && changes['longitude'] == null) {
             return;
@@ -77,18 +86,24 @@ export class YaMap implements OnChanges, OnInit, OnDestroy {
           this._mapsWrapper.setCenter(newCenter);
         }
         */
-        this._mapsWrapper.setCenter(newCenter);
+        this._mapsWrapper.setCenter([this.latitude, this.longitude]);
     }
     
 
 
     private _initMapInstance(el: HTMLElement) {
         this._mapsWrapper.createMap(el, {
-            zoom: this.zoom,
-            minZoom: this.minZoom,
-            maxZoom: this.maxZoom,
+            behaviors: this.behaviors,
+            bounds: this.bounds,
             center: [this.latitude, this.longitude],
-            mapTypeId: this.mapTypeId
+            controls: this.controls,
+            margin: this.margin,
+            type: this.type,
+            zoom: this.zoom
+        }, 
+        {
+            minZoom: this.minZoom,
+            maxZoom: this.maxZoom
         });
         this._handleMapMouseEvents();
     }
