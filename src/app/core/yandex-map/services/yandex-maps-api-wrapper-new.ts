@@ -7,10 +7,11 @@ import { MapsAPILoader } from './maps-api-loader/maps-api-loader';
 // import * as ymaps from 'ymaps';
 
 // const ymaps =  require('@types/yandex-maps');
-/// <reference path="@types/yandex-maps" />
+// <reference path="@types/yandex-maps" />
 // declare var ymaps: any;
 
-// import * as ymaps from 'yandex-maps';
+import * as ymaps from 'yandex-maps';
+import * as fs from 'http';
 
 @Injectable()
 export class YandexMapsAPIWrapperNew {
