@@ -1,9 +1,20 @@
 import { Component, ElementRef, EventEmitter, OnChanges, OnDestroy, OnInit, SimpleChanges, Input, Output } from '@angular/core';
 import { YandexMapsAPIWrapperNew } from '../services/yandex-maps-api-wrapper-new';
 
-import * as mapTypes from '../services/yandex-maps-types';
+// import * as mapTypes from '../services/yandex-maps-types';
 import { Subscription } from "rxjs/Subscription";
 
+type BehaviorsType = 
+    'default'|'drag'|'scrollZoom'|'dblClickZoom'|'multiTouch'|'rightMouseButtonMagnifier'|
+    'leftMouseButtonMagnifier'|'ruler'|'routeEditor';
+
+type ControlType = 
+    'fullscreenControl'|'geolocationControl'|'routeEditor'|'rulerControl'|'searchControl'|'trafficControl'|
+    'typeSelector'|'zoomControl'|'smallMapDefaultSet'|'mediumMapDefaultSet'|'largeMapDefaultSet'|'default';
+
+type MapType = 'yandex#map'|'yandex#satellite'|'yandex#hybrid'; 
+
+export interface MapClickMouseEvent { lat: number, lng: number}
 
 @Component({
     selector: 'ya-map',
@@ -24,14 +35,14 @@ import { Subscription } from "rxjs/Subscription";
         <div>
     `
 })
-export class YaMap implements OnChanges, OnInit, OnDestroy {
-    @Input() behaviors: mapTypes.BehaviorsType[] = mapTypes.DefaultMapState.behaviors;
+export class YaMapNew implements OnChanges, OnInit, OnDestroy {
+    @Input() behaviors: BehaviorsType[] = ['default'];
     @Input() bounds: number[][];
     @Input() longitude: number = 0;
     @Input() latitude: number = 0;
-    @Input() controls: mapTypes.ControlType[] = mapTypes.DefaultMapState.controls;
+    @Input() controls: ControlType[] = ['default'];
     @Input() margin: number[][]|number[];
-    @Input() type: mapTypes.MapType = mapTypes.DefaultMapState.type;
+    @Input() type: MapType = 'yandex#map';
     @Input() zoom: number = 8;
     @Input() minZoom: number;
     @Input() maxZoom: number;
@@ -39,9 +50,9 @@ export class YaMap implements OnChanges, OnInit, OnDestroy {
     private mapInit: boolean = false;
     private _observableSubscriptions: Subscription[] = [];
 
-    @Output() mapClick: EventEmitter<mapTypes.MapClickMouseEvent> = new EventEmitter<mapTypes.MapClickMouseEvent>();
-    @Output() mapRightClick: EventEmitter<mapTypes.MapClickMouseEvent> = new EventEmitter<mapTypes.MapClickMouseEvent>();
-    @Output() mapDblClick: EventEmitter<mapTypes.MapClickMouseEvent> = new EventEmitter<mapTypes.MapClickMouseEvent>();
+    @Output() mapClick: EventEmitter<MapClickMouseEvent> = new EventEmitter<MapClickMouseEvent>();
+    @Output() mapRightClick: EventEmitter<MapClickMouseEvent> = new EventEmitter<MapClickMouseEvent>();
+    @Output() mapDblClick: EventEmitter<MapClickMouseEvent> = new EventEmitter<MapClickMouseEvent>();
     
     constructor(private _elem: ElementRef, private _mapsWrapper: YandexMapsAPIWrapperNew) {}
     
@@ -121,9 +132,9 @@ export class YaMap implements OnChanges, OnInit, OnDestroy {
         ];
     
         events.forEach((e: Event) => {
-          const s = this._mapsWrapper.subscribeToMapEvent<{latLng: mapTypes.LatLng}>(e.name).subscribe(
-              (event: {latLng: mapTypes.LatLng}) => {
-                const value = <mapTypes.MapClickMouseEvent>{lat: event.latLng.lat(), lng: event.latLng.lng()};
+          const s = this._mapsWrapper.subscribeToMapEvent<{latLng: number[]}>(e.name).subscribe(
+              (event: {latLng: number[]}) => {
+                const value = <MapClickMouseEvent>{lat: event.latLng[0], lng: event.latLng[1]};
                 e.emitter.emit(value);
               });
           this._observableSubscriptions.push(s);

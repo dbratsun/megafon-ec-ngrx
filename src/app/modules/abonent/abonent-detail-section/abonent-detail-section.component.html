@@ -7,7 +7,11 @@
       <abonent-detail-view [abonentDetails]="abonentDetails$ | async"></abonent-detail-view>
     </div>
     <div class="abonent-detail-section-body-map" *ngIf="abonentHasDetails$ | async">
-      <ya-map [latitude]="55.76" [longitude]="37.64" [controls]="['geolocationControl', 'routeEditor', 'trafficControl']" [zoom]="12"></ya-map>
+      <ya-map [latitude]="55.76" [longitude]="37.64" 
+          [controls]="['geolocationControl', 'routeEditor', 'trafficControl', 'zoomControl', 'rulerControl']" 
+          [behaviors]="['ruler']"
+          [zoom]="12"
+          [type]="'yandex#map'"></ya-map>
     </div>   
   </div> 
 </div>

@@ -62,15 +62,27 @@ export interface SetZoomOptions {
     useMapMargin?: string;  
 }
 
+// default behaviors state: 'default', s. DefaultMapState
+// 'default' = drag + dblClickZoom + rightMouseButtonMagnifier for desktop
+//           = drag + dblClickZoom + multiTouch for mobile devices
+
 export type BehaviorsType = 
     'default'|'drag'|'scrollZoom'|'dblClickZoom'|'multiTouch'|'rightMouseButtonMagnifier'|
     'leftMouseButtonMagnifier'|'ruler'|'routeEditor';
 
+// default map type state = 'yandex#map', s. DefaultMapState    
 export type MapType = 'yandex#map'|'yandex#satellite'|'yandex#hybrid';    
+
+// default controls: default, s. DefaultMapState
+// smallMapDefaultSet = zoomControl + searchControl + typeSelector + geolocationControl + fullscreenControl
+// mediumMapDefaultSet = smallMapDefaultSet + rulerControl + trafficControl
+// largeMapDefaultSet = mediumMapDefaultSet + routeEditor - fullScreen
+// default = mediumMapDefaultSet
 
 export type ControlType = 
     'fullscreenControl'|'geolocationControl'|'routeEditor'|'rulerControl'|'searchControl'|'trafficControl'|
     'typeSelector'|'zoomControl'|'smallMapDefaultSet'|'mediumMapDefaultSet'|'largeMapDefaultSet'|'default';
+
 
 export interface MapState {
     behaviors?: BehaviorsType[];
@@ -123,6 +135,64 @@ export const DefaultMapOptions = {
     yandexMapAutoSwitch: true,
     yandexMapDisablePoiInteractivity: false  
 }
+
+export type ControlManagerOptionsStatesType = 'small'|'medium'|'large';
+
+// todo: https://tech.yandex.ru/maps/doc/jsapi/2.1/ref/reference/IPane-docpage/
+export interface IPane {
+
+}
+
+export interface ControlManagerOptions {
+    margin: number;
+    pane: IPane;
+    states: ControlManagerOptionsStatesType[]; 
+}
+
+export interface controlManager {
+    constructor (map: YandexMap, controls: ControlType[], options: ControlManagerOptions);
+
+}
+
+export interface IEvent {
+    allowMapEvent();
+    callMethod(name: string);
+    get(name: string): Object;  // maybe any??
+    getSourceEvent(): IEvent|null;
+    isDefaultPrevented(): boolean;
+    isImmediatePropagationStopped(): boolean;
+    isMapEventAllowed(): boolean;
+    isPropagationStopped(): boolean;
+    preventDefault();
+    stopImmediatePropagation();
+    stopPropagation();
+}
+
+export interface IEventTrigger {
+    fire(type: string, eventObject?: Object|IEvent): IEventTrigger;  
+}
+
+// https://tech.yandex.ru/maps/doc/jsapi/2.1/ref/reference/IEventGroup-docpage/
+export interface IEventGroup {
+    add(types: string[][]|string[], callback: Function, context?: Object, priority?: number): IEventGroup;
+    remove(types: string[][]|string[], callback: Function, context?: Object, priority?: number): IEventGroup;
+    removeAll(): IEventGroup;
+}
+
+export interface IEventManager extends IEventTrigger {
+    constructor();
+    add(types: string[][]|string[], callback: Function, context?: Object, priority?: number);
+    fire(type: string, event?: Object|IEvent);
+    getParent(): IEventManager|null;
+    group(): IEventGroup;
+    remove(types: string[][]|string[], callback: Function, context?: Object, priority?: number): IEventManager;
+    setParent(parent: IEventManager|null);
+}
+
+export interface EventManager {
+    
+}
+
 
 /*
 export interface MapOptions {
