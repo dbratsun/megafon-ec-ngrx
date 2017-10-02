@@ -1,73 +1,61 @@
+// import * as benchmark from 'Benchmark';
 import {Injectable, NgZone} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {Observer} from 'rxjs/Observer';
 
-import * as mapTypes from './yandex-maps-types';
 import { MapsAPILoader } from './maps-api-loader/maps-api-loader';
-import { SetCenterOptions, GetOptions, PanToOptions } from "./yandex-maps-types";
 
 declare var ymaps: any;
 
 @Injectable()
 export class YandexMapsAPIWrapper {
-    private _map: Promise<mapTypes.YandexMap>;
-    private _mapResolver: (value?: mapTypes.YandexMap) => void;
+    private _map: Promise<ymaps.Map>;
+    private _mapResolver: (value?: ymaps.Map) => void;
 
     constructor(private _loader: MapsAPILoader, private _zone: NgZone) {
         this._map =
-            new Promise<mapTypes.YandexMap>((resolve: () => void) => { this._mapResolver = resolve; });
+            new Promise<ymaps.Map>((resolve: () => void) => { this._mapResolver = resolve; });
     }
 
-    /*
-    createMap(el: HTMLElement, mapOptions: mapTypes.MapOptions): Promise<void> {
-        return this._loader.load().then(() => {
-          const map = new ymaps.maps.Map(el, mapOptions);
-          this._mapResolver(<mapTypes.YandexMap>map);
-          return;
-        });
-    }
-    */
-
-    createMap(el: HTMLElement, mapState: mapTypes.MapState, mapOptions: mapTypes.MapOptions): Promise<void> {
+    createMap(el: HTMLElement, mapState: ymaps.IMapState, mapOptions: ymaps.IMapOptions): Promise<void> {
         let res = this._loader.load().then(() => {
             let create = () => setTimeout(() =>  {
                 if(ymaps.Map)  {
                 const map = new ymaps.Map(el, mapState, mapOptions);
-                this._mapResolver(<mapTypes.YandexMap>map);
+                this._mapResolver(<ymaps.Map>map);
                 }
                 else{
                 create();
                 }
             }, 100);
-            create(); 
+            create();
         }).catch(e => console.log(e));
         return res;
     }
-           
+
     subscribeToMapEvent<E>(eventName: string): Observable<E> {
         return Observable.create((observer: Observer<E>) => {
-          this._map.then((m: mapTypes.YandexMap) => {
+          this._map.then((m: ymaps.Map) => {
             m.events.add(eventName, (arg: E) => { this._zone.run(() => observer.next(arg)); });
           });
         });
       }
 
-    /*
-    setMapOptions(options: mapTypes.MapOptions) {
-        this._map.then((m: mapTypes.YandexMap) => { m.setOptions(options); });
+    setCenter(center: number[], zoom?: number, options?: ymaps.IMapPositionOptions): Promise<void> {
+        return this._map.then((map: ymaps.Map) => map.setCenter(center, zoom, options))
     }
-    */
-    
-    setCenter(center: number[], zoom?: number, options?: SetCenterOptions): Promise<void> {
-        return this._map.then((map: mapTypes.YandexMap) => map.setCenter(center, zoom, options))
+
+    getCenter(options?: ymaps.IMapMarginOptions): Promise<number[]> {
+        return this._map.then((map: ymaps.Map) => map.getCenter(options));
     }
-   
-    getCenter(options?: GetOptions): Promise<number[]> {
-        return this._map.then((map: mapTypes.YandexMap) => map.getCenter(options));
-    }
-   
-    panTo(center: number[], options?: PanToOptions): Promise<void> {
+
+    panTo(center: number[], options?: ymaps.IMapPanOptions): Promise<void> {
         return this._map.then((map) => map.panTo(center, options));
     }
-    
+
+    getNativeMap(): Promise<ymaps.Map> {
+        return this._map;
+    }
+
 }
+

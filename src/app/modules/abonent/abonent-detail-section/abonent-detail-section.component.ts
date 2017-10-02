@@ -18,13 +18,19 @@ export class AbonentDetailSectionComponent implements OnInit {
   abonentDetails$: Observable<AbonentDetailVM[]>;
   abonentHasDetails$: Observable<boolean>;
 
-  constructor(private store: Store<ApplicationState>) { 
+  center: ymaps.LatLng;
+
+  constructor(private store: Store<ApplicationState>) {
     this.abonentName$ = store.select(abonentNameSelector);
     this.abonentDetails$ = store.select(abonentDetailsSelector);
     this.abonentHasDetails$ = store.select(abonentHasDetailsSelector);
   }
 
   ngOnInit() {
+  }
+
+  onCenterChange(center: ymaps.LatLng) {
+    this.center = center;
   }
 
 }
