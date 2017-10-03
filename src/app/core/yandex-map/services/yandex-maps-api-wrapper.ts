@@ -69,7 +69,7 @@ export class YandexMapsAPIWrapper {
         return this._map.then((map: ymaps.Map) => map.margin.getOffset());
     }
 
-    getType(): Promise<string> {
+    getType(): Promise<string|ymaps.MapType> {
         return this._map.then((map: ymaps.Map) => map.getType());
     }
 
@@ -85,9 +85,17 @@ export class YandexMapsAPIWrapper {
         return this._map.then((map: ymaps.Map) => map.options);
     }
 
-    setOption(key: object | string, value?: object): Promise<ymaps.option.Manager> {
+    setMapOption(key: object | string, value?: object): Promise<ymaps.option.Manager> {
         return this._map.then((map: ymaps.Map) => map.options.set(key, value));
     }
+
+    enableMapStateBehaviors(behaviors: string[][] | string[] | string): Promise<ymaps.map.behavior.Manager> {
+        return this._map.then((map: ymaps.Map) => map.behaviors.enable(behaviors));
+    }
+
+    disableMapStateBehaviors(behaviors: string[][] | string[] | string): Promise<ymaps.map.behavior.Manager> {
+        return this._map.then((map: ymaps.Map) => map.behaviors.disable(behaviors));
+  }
 
 }
 

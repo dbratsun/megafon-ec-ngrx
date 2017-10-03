@@ -1,4 +1,15 @@
-import { Component, ElementRef, EventEmitter, OnChanges, OnDestroy, OnInit, SimpleChanges, Input, Output } from '@angular/core';
+import {
+    Component,
+    ElementRef,
+    EventEmitter,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    Output,
+    SimpleChange,
+    SimpleChanges,
+} from '@angular/core';
 import { YandexMapsAPIWrapper } from '../services/yandex-maps-api-wrapper';
 
 // import * as mapTypes from '../services/yandex-maps-types';
@@ -19,22 +30,25 @@ export interface MapClickMouseEvent { lat: number, lng: number}
         }
     `],
     template: `
-        <div class='ya-map-container-inner'><div>
+        <div class='ya-map-container-inner'></div>
         <div class='ya-map-content'>
             <ng-content></ng-content>
         <div>
     `
 })
 export class YaMap implements OnChanges, OnInit, OnDestroy {
-    @Input() behaviors: ymaps.BehaviorsType[] = ['default'];
-    @Input() bounds: number[][];
     @Input() longitude: number = 0;
     @Input() latitude: number = 0;
+
+    // state properties
+    @Input() behaviors: ymaps.BehaviorsType[] = ['default'];
+    @Input() bounds: number[][];
     @Input() controls: ymaps.ControlType[] = ['default'];
     @Input() margin: number[][]|number[];
     @Input() type: ymaps.MapStateType = 'yandex#map';
     @Input() zoom: number = 8;
 
+    // options properties
     @Input() autoFitToViewport: ymaps.AutoFitToViewportType = 'ifNull';
     @Input() avoidFractionalZoom: boolean = true;
     @Input() exitFullscreenByEsc: boolean = true;
@@ -53,17 +67,16 @@ export class YaMap implements OnChanges, OnInit, OnDestroy {
 
     @Input() useMapMargin: boolean = false; // for using in getGlobalPixelCenter as parameter
 
-    private static _inputAttributes: string[] = [
-        'behaviors', 'bounds', 'controls', 'margin', 'type', 'zoom',
+    private static _inputMapOptions: string[] = [
         'autoFitToViewport', 'avoidFractionalZoom', 'exitFullscreenByEsc', 'fullscreenZIndex',
         'mapAutoFocus', 'maxAnimationZoomDifference', 'maxZoom', 'minZoom', 'nativeFullscreen',
-        'suppressMapOpenBlock', 'suppressObsoleteBrowserNotifier', 'yandexMapAutoSwitch', 'yandexMapDisablePoiInteractivity',
-        'useMapMargin'
+        'suppressMapOpenBlock', 'suppressObsoleteBrowserNotifier', 'yandexMapAutoSwitch', 'yandexMapDisablePoiInteractivity'
     ]
 
-    private static _inputMapOptions: string[] = [
-        'autoFitToViewport', 'avoidFractionalZoom', 'exitFullscreenByEsc'
-    ]
+    private static _inputMapBehaviors: ymaps.BehaviorsType[] = [
+        'default', 'drag', 'scrollZoom', 'dblClickZoom', 'multiTouch', 'rightMouseButtonMagnifier',
+        'leftMouseButtonMagnifier','ruler','routeEditor'
+    ];
 
     private mapInit: boolean = false;
     private _observableSubscriptions: Subscription[] = [];
@@ -76,14 +89,14 @@ export class YaMap implements OnChanges, OnInit, OnDestroy {
     @Output() zoomChange: EventEmitter<number> = new EventEmitter<number>();
     @Output() globalPixelCenterChange: EventEmitter<ymaps.LatLng> = new EventEmitter<ymaps.LatLng>();
     @Output() boundsChange: EventEmitter<number[][]> = new EventEmitter<number[][]>();
-    
-    @Output() actionBegin: EventEmitter<Object> = new EventEmitter<Object>();  
-    @Output() actionBreak: EventEmitter<Object> = new EventEmitter<Object>();  
-    @Output() actionEnd: EventEmitter<Object> = new EventEmitter<Object>(); 
-    
-    @Output() marginChange: EventEmitter<ymaps.map.margin.MarginOffsetInfo> = new EventEmitter<ymaps.map.margin.MarginOffsetInfo>(); 
-    @Output() typeChange: EventEmitter<string> = new EventEmitter<string>();  
-    
+
+    @Output() actionBegin: EventEmitter<Object> = new EventEmitter<Object>();
+    @Output() actionBreak: EventEmitter<Object> = new EventEmitter<Object>();
+    @Output() actionEnd: EventEmitter<Object> = new EventEmitter<Object>();
+
+    @Output() marginChange: EventEmitter<ymaps.map.margin.MarginOffsetInfo> = new EventEmitter<ymaps.map.margin.MarginOffsetInfo>();
+    @Output() typeChange: EventEmitter<string> = new EventEmitter<string>();
+
     @Output() mapReady: EventEmitter<any> = new EventEmitter<any>();
 
     constructor(private _elem: ElementRef, private _mapsWrapper: YandexMapsAPIWrapper) {}
@@ -101,35 +114,33 @@ export class YaMap implements OnChanges, OnInit, OnDestroy {
     ngOnChanges(changes: SimpleChanges) {
         if (this.mapInit) {
             this._updateMapOptionsChanges(changes);
+            this._updateMapStateBehaviorsChanges(changes);
             this._updatePosition(changes);
         }
-      }
+    }
 
     private _updateMapOptionsChanges(changes: SimpleChanges) {
         for (let propName in changes) {
             if (YaMap._inputMapOptions.indexOf(propName) !== -1) {
-                this._mapsWrapper.setOption(propName, changes[propName].currentValue).then((manager: ymaps.option.Manager) => {
+                this._mapsWrapper.setMapOption(propName, changes[propName].currentValue).then((manager: ymaps.option.Manager) => {
                     this._mapsWrapper.getOptions().then((manager: ymaps.option.Manager) => {
                         const m = manager;
                     })
                 })
             }
         }
+    }
 
-        /*
-        let options: {[propName: string]: any} = {};
-        let optionsKeys = 
-            Object.keys(changes).filter(k => YaMap._inputMapOptions.indexOf(k) !== -1);
-        optionsKeys.forEach((k) => { 
-            options[k] = changes[k].currentValue; 
-            this._mapsWrapper.setOption(Object.keys(options)[k], changes[k].currentValue).then((manager: ymaps.option.Manager) => {
-                this._mapsWrapper.getOptions().then((manager: ymaps.option.Manager) => {
-                    const m = manager;
+    private _updateMapStateBehaviorsChanges(changes: SimpleChanges) {
+        for (let propName in changes) {
+            if (propName === 'behaviors') {
+                this._mapsWrapper.disableMapStateBehaviors(YaMap._inputMapBehaviors).then((manager: ymaps.map.behavior.Manager) => {
+                    this._mapsWrapper.enableMapStateBehaviors(changes[propName].currentValue).then((manager: ymaps.map.behavior.Manager) => {
+                        const m = manager;
+                    })
                 })
-            })
-        });
-        */
-        // this._mapsWrapper.SetMapOptions(options);
+            }
+        }
     }
 
     private _updatePosition(changes: SimpleChanges) {
@@ -222,7 +233,7 @@ export class YaMap implements OnChanges, OnInit, OnDestroy {
         })
         this._observableSubscriptions.push(s);
     }
-    
+
     private _handleMapActionEnd() {
         const s = this._mapsWrapper.subscribeToMapEvent<ymaps.IEvent>('actionend').subscribe((event: ymaps.IEvent) => {
             let action = event.get('action');
