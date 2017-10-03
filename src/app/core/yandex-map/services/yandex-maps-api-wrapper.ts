@@ -49,12 +49,44 @@ export class YandexMapsAPIWrapper {
         return this._map.then((map: ymaps.Map) => map.getCenter(options));
     }
 
+    getGlobalPixelCenter(options?: ymaps.IMapMarginOptions): Promise<number[]> {
+        return this._map.then((map: ymaps.Map) => map.getGlobalPixelCenter(options));
+    }
+
+    getBounds(options?: ymaps.IMapMarginOptions): Promise<number[][]> {
+        return this._map.then((map: ymaps.Map) => map.getBounds(options));
+    }
+
+    getZoom(): Promise<number> {
+        return this._map.then((map: ymaps.Map) => map.getZoom());
+    }
+
+    getMargin(): Promise<number[]> {
+        return this._map.then((map: ymaps.Map) => map.margin.getMargin());
+    }
+
+    getOffset(): Promise<number[]> {
+        return this._map.then((map: ymaps.Map) => map.margin.getOffset());
+    }
+
+    getType(): Promise<string> {
+        return this._map.then((map: ymaps.Map) => map.getType());
+    }
+
     panTo(center: number[], options?: ymaps.IMapPanOptions): Promise<void> {
         return this._map.then((map) => map.panTo(center, options));
     }
 
     getNativeMap(): Promise<ymaps.Map> {
         return this._map;
+    }
+
+    getOptions(): Promise<ymaps.option.Manager> {
+        return this._map.then((map: ymaps.Map) => map.options);
+    }
+
+    setOption(key: object | string, value?: object): Promise<ymaps.option.Manager> {
+        return this._map.then((map: ymaps.Map) => map.options.set(key, value));
     }
 
 }

@@ -1065,6 +1065,11 @@ declare namespace ymaps {
 				setArea(screenArea: object): this;
 			}
 
+			type MarginOffsetInfo = {
+				margin: number[],
+				offset: number[]
+			}
+
 			export class Manager {
 				constructor(map: Map);
 
@@ -2333,7 +2338,7 @@ declare namespace ymaps {
 		center?: number[];
 		controls?: ControlType[];
 		margin?: number[][] | number[];
-    type?: MapStateType;
+    	type?: MapStateType;
 		zoom?: number;
 	}
 

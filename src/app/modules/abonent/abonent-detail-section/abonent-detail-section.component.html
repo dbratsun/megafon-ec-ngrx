@@ -2,6 +2,8 @@
   <div class="abonent-detail-section-header">
     <span><h3>{{abonentName$ | async}}</h3></span>
     <span *ngIf="center">Center: {{center.lat}}, {{center.lng}}</span>
+    <input type="checkbox" [(ngModel)]="exitFullscreenByEsc" id="efsc">
+    <label for="efsc">Exit fullscreen by Escape</label>
   </div>
   <div class="abonent-detail-section-body">
     <div class="abonent-detail-section-body-list">
@@ -9,10 +11,11 @@
     </div>
     <div class="abonent-detail-section-body-map" *ngIf="abonentHasDetails$ | async">
       <ya-map [latitude]="55.76" [longitude]="37.64"
-          [controls]="['geolocationControl', 'routeEditor', 'trafficControl', 'zoomControl', 'rulerControl']"
+          [controls]="['geolocationControl', 'routeEditor', 'trafficControl', 'zoomControl', 'rulerControl', 'typeSelector']"
           [behaviors]="['default']"
           [zoom]="12"
           [type]="'yandex#map'"
+          [exitFullscreenByEsc]="exitFullscreenByEsc"
           (centerChange)="onCenterChange($event)"></ya-map>
     </div>
   </div>

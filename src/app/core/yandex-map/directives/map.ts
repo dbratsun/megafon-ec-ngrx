@@ -51,6 +51,20 @@ export class YaMap implements OnChanges, OnInit, OnDestroy {
     @Input() yandexMapAutoSwitch: boolean = true;
     @Input() yandexMapDisablePoiInteractivity: boolean = false;
 
+    @Input() useMapMargin: boolean = false; // for using in getGlobalPixelCenter as parameter
+
+    private static _inputAttributes: string[] = [
+        'behaviors', 'bounds', 'controls', 'margin', 'type', 'zoom',
+        'autoFitToViewport', 'avoidFractionalZoom', 'exitFullscreenByEsc', 'fullscreenZIndex',
+        'mapAutoFocus', 'maxAnimationZoomDifference', 'maxZoom', 'minZoom', 'nativeFullscreen',
+        'suppressMapOpenBlock', 'suppressObsoleteBrowserNotifier', 'yandexMapAutoSwitch', 'yandexMapDisablePoiInteractivity',
+        'useMapMargin'
+    ]
+
+    private static _inputMapOptions: string[] = [
+        'autoFitToViewport', 'avoidFractionalZoom', 'exitFullscreenByEsc'
+    ]
+
     private mapInit: boolean = false;
     private _observableSubscriptions: Subscription[] = [];
 
@@ -59,6 +73,17 @@ export class YaMap implements OnChanges, OnInit, OnDestroy {
     @Output() mapDblClick: EventEmitter<MapClickMouseEvent> = new EventEmitter<MapClickMouseEvent>();
 
     @Output() centerChange: EventEmitter<ymaps.LatLng> = new EventEmitter<ymaps.LatLng>();
+    @Output() zoomChange: EventEmitter<number> = new EventEmitter<number>();
+    @Output() globalPixelCenterChange: EventEmitter<ymaps.LatLng> = new EventEmitter<ymaps.LatLng>();
+    @Output() boundsChange: EventEmitter<number[][]> = new EventEmitter<number[][]>();
+    
+    @Output() actionBegin: EventEmitter<Object> = new EventEmitter<Object>();  
+    @Output() actionBreak: EventEmitter<Object> = new EventEmitter<Object>();  
+    @Output() actionEnd: EventEmitter<Object> = new EventEmitter<Object>(); 
+    
+    @Output() marginChange: EventEmitter<ymaps.map.margin.MarginOffsetInfo> = new EventEmitter<ymaps.map.margin.MarginOffsetInfo>(); 
+    @Output() typeChange: EventEmitter<string> = new EventEmitter<string>();  
+    
     @Output() mapReady: EventEmitter<any> = new EventEmitter<any>();
 
     constructor(private _elem: ElementRef, private _mapsWrapper: YandexMapsAPIWrapper) {}
@@ -75,14 +100,36 @@ export class YaMap implements OnChanges, OnInit, OnDestroy {
 
     ngOnChanges(changes: SimpleChanges) {
         if (this.mapInit) {
-            // this._updateMapOptionsChanges(changes);
+            this._updateMapOptionsChanges(changes);
             this._updatePosition(changes);
         }
       }
 
     private _updateMapOptionsChanges(changes: SimpleChanges) {
-        let options: {[propName: string]: any} = {};
+        for (let propName in changes) {
+            if (YaMap._inputMapOptions.indexOf(propName) !== -1) {
+                this._mapsWrapper.setOption(propName, changes[propName].currentValue).then((manager: ymaps.option.Manager) => {
+                    this._mapsWrapper.getOptions().then((manager: ymaps.option.Manager) => {
+                        const m = manager;
+                    })
+                })
+            }
+        }
 
+        /*
+        let options: {[propName: string]: any} = {};
+        let optionsKeys = 
+            Object.keys(changes).filter(k => YaMap._inputMapOptions.indexOf(k) !== -1);
+        optionsKeys.forEach((k) => { 
+            options[k] = changes[k].currentValue; 
+            this._mapsWrapper.setOption(Object.keys(options)[k], changes[k].currentValue).then((manager: ymaps.option.Manager) => {
+                this._mapsWrapper.getOptions().then((manager: ymaps.option.Manager) => {
+                    const m = manager;
+                })
+            })
+        });
+        */
+        // this._mapsWrapper.SetMapOptions(options);
     }
 
     private _updatePosition(changes: SimpleChanges) {
@@ -125,21 +172,101 @@ export class YaMap implements OnChanges, OnInit, OnDestroy {
         })
             .then(() => this._mapsWrapper.getNativeMap())
             .then(map => this.mapReady.emit(map));
-        this._handleMapCenterChange();
+        this._handleMapBoundsChange();
+        this._handleMapActionBegin();
+        this._handleMapActionBreak();
+        this._handleMapActionEnd();
+        this._handleMarginChange();
+        this._handleTypeChange();
         // this._handleMapMouseEvents();
     }
 
-    private _handleMapCenterChange() {
-      const s = this._mapsWrapper.subscribeToMapEvent<void>('boundschange').subscribe(() => {
-        this._mapsWrapper.getCenter().then((center: number[]) => {
-          this.latitude = center[0];
-          this.longitude = center[1];
-          this.centerChange.emit(<ymaps.LatLng>{lat: this.latitude, lng: this.longitude});
+    private _handleMapBoundsChange() {
+        const s = this._mapsWrapper.subscribeToMapEvent<ymaps.IEvent>('boundschange').subscribe((event: ymaps.IEvent) => {
+            if (event.get('newZoom') !== event.get('oldZoom')) {
+                this._mapsWrapper.getZoom().then((zoom: number) => {
+                    this.zoomChange.emit(zoom);
+                });
+            }
+            if (event.get('newCenter') !== event.get('oldCenter')) {
+                this._mapsWrapper.getCenter().then((center: number[]) => {
+                    this.centerChange.emit(<ymaps.LatLng>{lat: center[0], lng: center[1]});
+                });
+            }
+            if (event.get('oldGlobalPixelCenter') !== event.get('newGlobalPixelCenter')) {
+                this._mapsWrapper.getGlobalPixelCenter(this.useMapMargin).then((center: number[]) => {
+                    this.globalPixelCenterChange.emit(<ymaps.LatLng>{lat: center[0], lng: center[1]});
+                });
+            }
+            if (event.get('newBounds') !== event.get('oldBounds')) {
+                this._mapsWrapper.getBounds(this.useMapMargin).then((bounds: number[][]) => {
+                    this.boundsChange.emit(bounds);
+                });
+            }
         });
-      });
-    this._observableSubscriptions.push(s);
+        this._observableSubscriptions.push(s);
     }
 
+    private _handleMapActionBegin() {
+        const s = this._mapsWrapper.subscribeToMapEvent<ymaps.IEvent>('actionbegin').subscribe((event: ymaps.IEvent) => {
+            let action = event.get('action');
+            this.actionBegin.emit(event.get('action'));
+        })
+        this._observableSubscriptions.push(s);
+    }
+
+    private _handleMapActionBreak() {
+        const s = this._mapsWrapper.subscribeToMapEvent<ymaps.IEvent>('actionbreak').subscribe((event: ymaps.IEvent) => {
+            let action = event.get('action');
+            this.actionBreak.emit(event.get('action'));
+        })
+        this._observableSubscriptions.push(s);
+    }
+    
+    private _handleMapActionEnd() {
+        const s = this._mapsWrapper.subscribeToMapEvent<ymaps.IEvent>('actionend').subscribe((event: ymaps.IEvent) => {
+            let action = event.get('action');
+            this.actionEnd.emit(event.get('action'));
+        })
+        this._observableSubscriptions.push(s);
+    }
+
+    // todo: actiontick, actiontickcomplete
+
+    // todo: balloonclose, balloonopen
+
+    // todo: destroy
+
+    // todo: hintclose, hintopen
+
+    private _handleMarginChange() {
+        const s = this._mapsWrapper.subscribeToMapEvent<ymaps.IEvent>('marginchange').subscribe((event: ymaps.IEvent) => {
+            let _margin: number[] = [];
+            this._mapsWrapper.getMargin().then((margin: number[]) => {
+                _margin = margin;
+            })
+            let _offset: number[] = [];
+            this._mapsWrapper.getOffset().then((offset: number[]) => {
+                _offset = offset;
+            })
+            this.marginChange.emit(<ymaps.map.margin.MarginOffsetInfo>{margin: _margin, offset: _offset})
+        })
+        this._observableSubscriptions.push(s);
+    }
+
+    // todo: optionschange
+
+    // todo: sizechange
+
+    private _handleTypeChange() {
+        const s = this._mapsWrapper.subscribeToMapEvent<ymaps.IEvent>('typechange').subscribe((event: ymaps.IEvent) => {
+            this._mapsWrapper.getType().then((type: string) => {
+                this.type = type as ymaps.MapStateType;
+                this.typeChange.emit(type);
+            })
+        })
+        this._observableSubscriptions.push(s);
+    }
 
     private _handleMapMouseEvents() {
         interface Emitter {
