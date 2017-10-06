@@ -1,13 +1,152 @@
 body {
     font: 13px/18px Tahoma, sans-serif, Arial, Helvetica
-    /*
-    font-style: normal;
-    font-size: 13px;
-    line-height: 18px;
-    font-family: Tahoma, sans-serif, Arial, Helvetica;
-    */
 }
+
 .thisapp {
     max-width: 1310px;
     margin: 0 auto;
 }
+
+// navigation
+
+.nav-head {
+  height: 48px;
+  background: #5682a3;
+  color: #b9cfe3;
+  display: flex;
+}
+
+.nav-logo {
+  width: 31%;
+  padding: 0 10px;
+}
+
+.nav-main {
+  width: 69%;
+  padding: 0 10px;
+}
+
+// application body
+
+.app-body {
+  display: flex;
+  flex-direction: row;
+  height: 750px;
+  // border: 1px solid rgba(26, 141, 236, 0.38);
+}
+
+abonent-section {
+  width: 15%;
+  border: 1px solid rgba(26, 141, 236, 0.38);
+  height: 100%;
+}
+
+.abonent-section-header {
+  margin: 0 10px;
+}
+
+abonent-detail-section {
+  display: flex;
+  flex-direction: column;
+  width: 85%;
+  height: 100%;
+  border: 1px solid rgba(26, 141, 236, 0.38);
+}
+
+.abonent-detail-section-header {
+  height: 480px;
+  margin: 0 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.abonent-detail-section-header-abonent-info {
+  height: 50px;
+}
+
+.abonent-detail-section-header-toolbox {
+  display: flex;
+  flex: 2 100%;
+}
+
+.abonent-detail-section-header-toolbox-toolbar {
+  display: flex;
+  flex: 2;
+}
+
+.abonent-detail-section-header-toolbox-toolbar-options {
+  display: flex;
+  flex-direction: column;
+}
+
+.abonent-detail-section-header-toolbox-toolbar-options-value {
+  display: flex;
+}
+
+.abonent-detail-section-header-toolbox-toolbar-behaviors {
+  margin: 0 15px;
+}
+
+.abonent-detail-section-header-toolbox-info {
+  width: 300px;
+}
+
+.abonent-detail-section-body {
+  display: flex;
+  border-top: 1px solid rgba(26, 141, 236, 0.38);
+  flex: 2 100%;
+}
+
+.abonent-detail-section-body-list {
+  height: 100%;
+}
+
+.abonent-detail-section-body-map {
+  flex: 2 100%;
+}
+
+ya-map {
+  height: 100%;
+  width: 100%;
+}
+
+
+/*
+.ya-map-content {
+width: 100%;
+height: 100%;
+}
+
+
+.abonent-detail-section-body-map {
+width: 100%;
+height: 100%;
+margin-left: 10px;
+position: absolute;
+  margin-left: 230px;
+  margin-left: 223px;
+  top: 3px;
+}
+*/
+
+
+
+/*
+#map {
+position: absolute;
+height: 100px;
+width: 100px;
+}
+*/
+
+/*
+.ya-map-container-inner {
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+}
+*/
+
+

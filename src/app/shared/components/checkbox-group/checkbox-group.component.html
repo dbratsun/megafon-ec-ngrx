@@ -1,0 +1,6 @@
+<div *ngFor="let v of valuesDef">
+    <label>
+      <input type="checkbox" name="value" value={{v.value}} [(ngModel)]="v.checked" (change)="valueChanged($event)">
+      {{v.name}}
+    </label>
+</div>

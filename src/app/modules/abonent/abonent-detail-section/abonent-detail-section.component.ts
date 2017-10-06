@@ -1,3 +1,4 @@
+import { YaMap, MouseEvent, MouseEventType } from '../../../core/yandex-map/directives/map';
 import { Component, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { Store } from "@ngrx/store";
 import { ApplicationState } from "../../../core/store/application-state";
@@ -6,6 +7,13 @@ import { AbonentDetailVM } from "./abonent-detail.vm";
 import { abonentNameSelector } from "./abonentNameSelector";
 import { abonentDetailsSelector } from "./abonentDetailsSelector";
 import { abonentHasDetailsSelector } from "./abonentHasDetailsSelector";
+
+type behaviorsCheck = {
+    name: string;
+    value: string;
+    checked: boolean;
+}
+
 
 @Component({
   selector: 'abonent-detail-section',
@@ -20,8 +28,20 @@ export class AbonentDetailSectionComponent implements OnInit {
 
   currentAbonentId: number;
   center: ymaps.LatLng;
+  mouseEvent: {
+      name: string,
+      coord: ymaps.LatLng
+  };
 
   exitFullscreenByEsc: boolean;
+  minZoom: number;
+  maxZoom: number;
+  zoom: number;
+
+  behaviors: ymaps.BehaviorsType[];
+  allBehaviors: ymaps.BehaviorsType[];
+  controls: ymaps.ControlKey[];
+  allControls: ymaps.ControlKey[];
 
   constructor(private store: Store<ApplicationState>) {
     this.abonentName$ = store.select(abonentNameSelector);
@@ -35,6 +55,13 @@ export class AbonentDetailSectionComponent implements OnInit {
       }
     )
     this.exitFullscreenByEsc = true;
+    this.minZoom = 0;
+    this.maxZoom = 23;
+    this.zoom = 13;
+    this.behaviors = ['default']; // ['drag', 'scrollZoom', 'ruler'];
+    this.allBehaviors = YaMap.getAllBehaviors();
+    this.controls = ['geolocationControl', 'routeEditor', 'trafficControl', 'zoomControl', 'rulerControl', 'typeSelector'];
+    this.allControls = YaMap.getAllControls();
   }
 
   ngOnInit() {
@@ -43,6 +70,28 @@ export class AbonentDetailSectionComponent implements OnInit {
 
   onCenterChange(center: ymaps.LatLng) {
     this.center = center;
+  }
+
+  onZoomChange(zoom: number) {
+    this.zoom = zoom;
+  }
+
+  behaviorChanged(event) {
+    this.behaviors = event;
+  }
+
+  controlsChanged(event) {
+    this.controls = event;
+  }
+
+  onMouseEvent(event: MouseEvent) {
+    this.mouseEvent = {
+      name: event.name,
+      coord: {
+        lat: event.coords[0],
+        lng: event.coords[1]
+      }
+    }
   }
 
 }

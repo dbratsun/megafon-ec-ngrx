@@ -53,8 +53,16 @@ export class YandexMapsAPIWrapper {
         return this._map.then((map: ymaps.Map) => map.getGlobalPixelCenter(options));
     }
 
+    setBounds(bounds: number[][], options?: ymaps.IMapBoundsOptions): Promise<void> {
+        return this._map.then((map: ymaps.Map) => map.setBounds(bounds, options));
+    }
+
     getBounds(options?: ymaps.IMapMarginOptions): Promise<number[][]> {
         return this._map.then((map: ymaps.Map) => map.getBounds(options));
+    }
+
+    setZoom(zoom: number, options?: ymaps.IMapZoomOptions): Promise<void> {
+        return this._map.then((map: ymaps.Map) => map.setZoom(zoom, options));
     }
 
     getZoom(): Promise<number> {
@@ -95,7 +103,15 @@ export class YandexMapsAPIWrapper {
 
     disableMapStateBehaviors(behaviors: string[][] | string[] | string): Promise<ymaps.map.behavior.Manager> {
         return this._map.then((map: ymaps.Map) => map.behaviors.disable(behaviors));
-  }
+    }
+
+    addMapStateControl(control: ymaps.ControlKey): Promise<ymaps.control.Manager> {
+        return this._map.then((map: ymaps.Map) => map.controls.add(control));
+    }
+
+    removeMapStateControl(control: ymaps.ControlKey): Promise<ymaps.control.Manager> {
+        return this._map.then((map: ymaps.Map) => map.controls.remove(control));
+    }
 
 }
 

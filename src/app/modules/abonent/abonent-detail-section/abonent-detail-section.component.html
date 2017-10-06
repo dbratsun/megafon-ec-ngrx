@@ -1,22 +1,55 @@
-<div class="abonent-detail-section">
-  <div class="abonent-detail-section-header">
-    <span><h3>{{abonentName$ | async}}</h3></span>
-    <span *ngIf="center">Center: {{center.lat}}, {{center.lng}}</span>
-    <input type="checkbox" [(ngModel)]="exitFullscreenByEsc" id="efsc">
-    <label for="efsc">Exit fullscreen by Escape</label>
+<div class="abonent-detail-section-header">
+  <div class="abonent-detail-section-header-abonent-info">
+      <span><h3>{{abonentName$ | async}}</h3></span>
   </div>
-  <div class="abonent-detail-section-body">
-    <div class="abonent-detail-section-body-list">
-      <abonent-detail-view [abonentDetails]="abonentDetails$ | async"></abonent-detail-view>
+  <div class="abonent-detail-section-header-toolbox" *ngIf="abonentHasDetails$ | async">
+    <div class="abonent-detail-section-header-toolbox-toolbar">
+        <div class="abonent-detail-section-header-toolbox-toolbar-options">
+          <div class="abonent-detail-section-header-toolbox-toolbar-options-value">
+              <input type="checkbox" [(ngModel)]="exitFullscreenByEsc" id="efsc">
+              <label for="efsc">Exit fullscreen by Escape</label>
+          </div>
+          <div class="abonent-detail-section-header-toolbox-toolbar-options-value">
+              <label for="minz">Zoom min</label>
+              <input type="number" [(ngModel)]="minZoom" id="minz">
+          </div>
+          <div class="abonent-detail-section-header-toolbox-toolbar-options-value">
+              <label for="maxz">Zoom max</label>
+              <input type="number" [(ngModel)]="maxZoom" id="maxz">
+          </div>
+          <div class="abonent-detail-section-header-toolbox-toolbar-options-value">
+              <label for="zoo">Zoom</label>
+              <input type="number" [(ngModel)]="zoom" id="zoo">
+          </div>
+        </div>
+        <checkbox-group class="abonent-detail-section-header-toolbox-toolbar-behaviors"
+          [values]="allBehaviors" [checkedValues]="behaviors" (valuesChange)="behaviorChanged($event)">
+        </checkbox-group>
+        <checkbox-group class="abonent-detail-section-header-toolbox-toolbar-controls"
+          [values]="allControls" [checkedValues]="controls" (valuesChange)="controlsChanged($event)">
+        </checkbox-group>
     </div>
-    <div class="abonent-detail-section-body-map" *ngIf="abonentHasDetails$ | async">
-      <ya-map [latitude]="55.76" [longitude]="37.64"
-          [controls]="['geolocationControl', 'routeEditor', 'trafficControl', 'zoomControl', 'rulerControl', 'typeSelector']"
-          [behaviors]="['default']"
-          [zoom]="12"
-          [type]="'yandex#map'"
-          [exitFullscreenByEsc]="exitFullscreenByEsc"
-          (centerChange)="onCenterChange($event)"></ya-map>
-    </div>
+    <div class="abonent-detail-section-header-toolbox-info">
+        <span *ngIf="center">Center: {{center.lat | number:'2.2-3'}}, {{center.lng | number:'2.2-3'}}</span>
+        <span *ngIf="mouseEvent">Mouse Event: {{mouseEvent.name}}, Coord: {{mouseEvent.coord.lat | number:'2.2-3'}}, {{mouseEvent.coord.lng | number:'2.2-3'}}</span>
+      </div>
+  </div>
+</div>
+<div class="abonent-detail-section-body" *ngIf="abonentHasDetails$ | async">
+  <div class="abonent-detail-section-body-list">
+    <abonent-detail-view [abonentDetails]="abonentDetails$ | async"></abonent-detail-view>
+  </div>
+  <div class="abonent-detail-section-body-map">
+    <ya-map [latitude]="55.76" [longitude]="37.64"
+        [controls]="controls"
+        [behaviors]="behaviors"
+        [type]="'yandex#map'"
+        [exitFullscreenByEsc]="exitFullscreenByEsc"
+        [minZoom]="minZoom"
+        [maxZoom]="maxZoom"
+        [zoom]="zoom"
+        (centerChange)="onCenterChange($event)"
+        (zoomChange)="onZoomChange($event)"
+        (mouseEvent)="onMouseEvent($event)"></ya-map>
   </div>
 </div>

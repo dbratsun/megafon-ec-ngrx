@@ -6,13 +6,14 @@ import { AbonentListComponent } from "./abonent/abonent-list/abonent-list.compon
 import { AbonentDetailSectionComponent } from './abonent/abonent-detail-section/abonent-detail-section.component';
 import { AbonentDetailViewComponent } from './abonent/abonent-detail-view/abonent-detail-view.component';
 import { YandexMapModule } from '../core/yandex-map/yandex-map.module';
+import { CheckboxGroupComponent } from '../shared/components/checkbox-group/checkbox-group.component';
 
 const COMPONENTS = [
     AbonentSectionComponent,
     AbonentListComponent,
     AbonentDetailSectionComponent,
-    AbonentDetailViewComponent
-    
+    AbonentDetailViewComponent,
+    CheckboxGroupComponent
 ]
 
 @NgModule({

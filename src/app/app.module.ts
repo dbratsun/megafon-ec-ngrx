@@ -36,7 +36,7 @@ function logger(reducer: ActionReducer<ApplicationState>) {
     console.log('state', state);
     console.log('action', action);
     return reducer(state, action)
-  }  
+  }
 }
 
 @NgModule({
@@ -55,7 +55,7 @@ function logger(reducer: ActionReducer<ApplicationState>) {
     // YaCoreModule.forRoot()
     // AgmCoreModule.forRoot('AIzaSyBIzVfqrmUKLhY95dxlagwK-8SOZB0Q3tQ')
     YandexMapModule.forRoot()
-  ],  
+  ],
   providers: [AbonentsService, AbonentDetailService],
   bootstrap: [AppComponent]
 })

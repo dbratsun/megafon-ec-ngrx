@@ -2338,7 +2338,7 @@ declare namespace ymaps {
 		center?: number[];
 		controls?: ControlType[];
 		margin?: number[][] | number[];
-    	type?: MapStateType;
+    type?: MapStateType;
 		zoom?: number;
 	}
 
