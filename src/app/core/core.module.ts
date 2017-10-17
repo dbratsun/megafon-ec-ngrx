@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavComponent } from './nav/nav.component';
+import { MapObject, ChildObject } from './test-inject/testobjects';
 
 const COMPONENTS = [
-  NavComponent  
+  NavComponent, MapObject, ChildObject  
 ]
 
 @NgModule({

@@ -7,6 +7,7 @@ import { AbonentDetailSectionComponent } from './abonent/abonent-detail-section/
 import { AbonentDetailViewComponent } from './abonent/abonent-detail-view/abonent-detail-view.component';
 import { YandexMapModule } from '../core/yandex-map/yandex-map.module';
 import { CheckboxGroupComponent } from '../shared/components/checkbox-group/checkbox-group.component';
+import { CoreModule } from '../core/core.module';
 
 const COMPONENTS = [
     AbonentSectionComponent,
@@ -20,7 +21,8 @@ const COMPONENTS = [
     imports: [
         CommonModule,
         FormsModule,
-        YandexMapModule.forRoot()
+        YandexMapModule.forRoot(),
+        CoreModule
     ],
     declarations: [
         ...COMPONENTS

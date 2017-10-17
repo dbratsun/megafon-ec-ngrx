@@ -1,13 +1,23 @@
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { ModuleWithProviders, NgModule, NgZone } from '@angular/core';
 
 import { YaMap } from './directives/map';
 import { YandexMapsApiLoader } from "app/core/yandex-map/services/maps-api-loader/yandex-maps-api-loader";
+import { YandexMapsAPIWrapper } from './services/yandex-maps-api-wrapper';
 import { MapsAPILoader } from "app/core/yandex-map/services/maps-api-loader/maps-api-loader";
 
 import { BROWSER_GLOBALS_PROVIDERS } from './utils/browser-globals';
 
+// import { YaGeoObject } from './directives/geoobject';
+import { YaPlacemark1 } from './directives/geoobject';
+import { GeoObjectManager } from './services/managers/geoobject-manager';
+
 export function coreDirectives() {
-    return [ YaMap ];
+    return [ 
+        YaMap, 
+        // YaGeoObject, 
+        // YaPlacemark,
+        YaPlacemark1 
+    ];
 }
 
 @NgModule({
@@ -20,7 +30,9 @@ export class YandexMapModule {
             ngModule: YandexMapModule,
             providers: [
                 ...BROWSER_GLOBALS_PROVIDERS,
-                { provide: MapsAPILoader, useClass: YandexMapsApiLoader}
+                { provide: MapsAPILoader, useClass: YandexMapsApiLoader }
+                // { provide: 'geoManager', useClass: GeoObjectManager }
+                // { provide: 'wrapper', useClass: YandexMapsAPIWrapper }
             ]
         }
     }

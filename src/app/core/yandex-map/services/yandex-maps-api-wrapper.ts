@@ -113,5 +113,23 @@ export class YandexMapsAPIWrapper {
         return this._map.then((map: ymaps.Map) => map.controls.remove(control));
     }
 
+    // geoObjects
+
+    createGeoObject(feature?: ymaps.IGeoObjectFeature, options?: ymaps.IGeoObjectOptions): Promise<ymaps.GeoObject> {
+        return this._map.then((map: ymaps.Map) => {
+            let o = new ymaps.GeoObject(feature, options);
+            map.geoObjects.add(o);
+            return o;
+        })
+    }
+
+    createPlacemark(geometry: number[] | object | ymaps.IPointGeometry, properties: object | ymaps.IDataManager, options?: ymaps.IPlacemarkOptions) {
+        return this._map.then((map: ymaps.Map) => {
+            let p = new ymaps.Placemark(geometry, properties, options);
+            map.geoObjects.add(p);
+            return p;
+        })
+    }
+
 }
 
