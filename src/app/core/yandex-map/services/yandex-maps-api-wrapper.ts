@@ -131,5 +131,37 @@ export class YandexMapsAPIWrapper {
         })
     }
 
+    createPolyline(geometry: number[][] | object | ymaps.ILineStringGeometry, properties: object | ymaps.IDataManager, options?: ymaps.IPolylineOptions) {
+        return this._map.then((map: ymaps.Map) => {
+            let p = new ymaps.Polyline(geometry, properties, options);
+            map.geoObjects.add(p);
+            return p;
+        })
+    }
+
+    createRectangle(geometry: number[][] | object | ymaps.IRectangleGeometry, properties: object | ymaps.IDataManager, options?: ymaps.IRectangleOptions) {
+        return this._map.then((map: ymaps.Map) => {
+            let p = new ymaps.Rectangle(geometry, properties, options);
+            map.geoObjects.add(p);
+            return p;
+        })
+    }
+
+    createPolygon(geometry: number[][] | object | ymaps.IPolygonGeometry, properties: object | ymaps.IDataManager, options?: ymaps.IPolygonOptions) {
+        return this._map.then((map: ymaps.Map) => {
+            let p = new ymaps.Polygon(geometry, properties, options);
+            map.geoObjects.add(p);
+            return p;
+        })
+    }
+
+    createCircle(geometry: ymaps.ICircleGeometry[][][][] | number[][] | object, properties: object | ymaps.IDataManager, options?: ymaps.ICircleOptions) {
+        return this._map.then((map: ymaps.Map) => {
+            let p = new ymaps.Circle(geometry, properties, options);
+            map.geoObjects.add(p);
+            return p;
+        })
+    }
+
 }
 

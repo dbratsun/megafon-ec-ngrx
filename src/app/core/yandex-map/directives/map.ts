@@ -1,11 +1,13 @@
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChange, SimpleChanges } from '@angular/core';
+import { Subscription } from "rxjs/Subscription";
+
 import { YandexMapsAPIWrapper } from '../services/yandex-maps-api-wrapper';
 import { GeoObjectManager } from '../services/managers/geoobject-manager';
 import { PlacemarkManager } from '../services/managers/placemark-manager';
-
-
-// import * as mapTypes from '../services/yandex-maps-types';
-import { Subscription } from "rxjs/Subscription";
+import { PolylineManager } from '../services/managers/polyline-manager';
+import { RectangleManager } from '../services/managers/rectangle-manager';
+import { PolygonManager } from "../services/managers/polygon-manager";
+import { CircleManager } from "../services/managers/circle-manager";
 
 export enum MouseEventType {
   click, dblClick, mousedown, mouseenter, mouseleave, mousemove, mouseup, wheel
@@ -22,7 +24,7 @@ export interface MouseEvent {
 
 @Component({
     selector: 'ya-map',
-    providers: [YandexMapsAPIWrapper, PlacemarkManager],
+    providers: [YandexMapsAPIWrapper, PlacemarkManager, PolylineManager, RectangleManager, PolygonManager, CircleManager],
     styles: [`
         .ya-map-container-inner {
             width: inherit;

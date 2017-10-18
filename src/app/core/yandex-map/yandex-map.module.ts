@@ -7,16 +7,20 @@ import { MapsAPILoader } from "app/core/yandex-map/services/maps-api-loader/maps
 
 import { BROWSER_GLOBALS_PROVIDERS } from './utils/browser-globals';
 
-// import { YaGeoObject } from './directives/geoobject';
 import { YaPlacemark } from './directives/placemark';
-// import { GeoObjectManager } from './services/managers/geoobject-manager';
+import { YaPolyline } from './directives/polyline';
+import { YaRectangle } from './directives/rectangle';
+import { YaPolygon } from "./directives/polygon";
+import { YaCircle } from "./directives/circle";
 
 export function coreDirectives() {
     return [ 
         YaMap, 
-        // YaGeoObject, 
-        // YaPlacemark,
-        YaPlacemark 
+        YaPlacemark,
+        YaPolyline,
+        YaRectangle,
+        YaPolygon,
+        YaCircle 
     ];
 }
 
@@ -31,8 +35,6 @@ export class YandexMapModule {
             providers: [
                 ...BROWSER_GLOBALS_PROVIDERS,
                 { provide: MapsAPILoader, useClass: YandexMapsApiLoader }
-                // { provide: 'geoManager', useClass: GeoObjectManager }
-                // { provide: 'wrapper', useClass: YandexMapsAPIWrapper }
             ]
         }
     }

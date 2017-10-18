@@ -2,20 +2,19 @@ import { Directive, EventEmitter, OnChanges, OnDestroy, AfterContentInit, Simple
 import { Subscription } from "rxjs/Subscription";
 
 import { YaGeoObjectBase } from '../directives/geoobjectbase';
-import { IGeoObjectBase, IPlacemark, IPlacemarkData } from '../interfaces/igeoobject';
-import { PlacemarkManager } from '../services/managers/placemark-manager';
+import { IGeoObjectBase, IRectangle, IRectangleData } from '../interfaces/igeoobject';
+import { RectangleManager } from '../services/managers/rectangle-manager';
 
 @Directive({
-    selector: 'ya-placemark'
+    selector: 'ya-rectangle'
 })
-export class YaPlacemark extends YaGeoObjectBase implements IGeoObjectBase, IPlacemark, OnChanges, AfterContentInit {
+export class YaRectangle extends YaGeoObjectBase implements IGeoObjectBase, IRectangle, OnChanges, AfterContentInit {
 
-    @Input() latitude: number;
-    @Input() longitude: number;
+    @Input() geometry: number[][] | ymaps.IRectangleGeometry;
     @Input() cursor: string = 'pointer';
     @Input() draggable: boolean = false;
 
-    constructor(private manager: PlacemarkManager) {
+    constructor(private manager: RectangleManager) {
         super(manager)
     }
 
@@ -28,12 +27,12 @@ export class YaPlacemark extends YaGeoObjectBase implements IGeoObjectBase, IPla
     }
 
     toString(): string {
-        return 'YaPlacemark-' + this.id;
+        return 'YaRectangle-' + this.id;
     }
 
-    getData(): IPlacemarkData {
+    getData(): IRectangleData {
         return {
-            geometry: [this.latitude, this.longitude],
+            geometry: this.geometry,
             properties: {
             },
             options: {

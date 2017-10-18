@@ -4,7 +4,7 @@ import { Subscription } from "rxjs/Subscription";
 import { GeoObjectManagerBase } from '../services/managers/geoobjectbase-manager';
 import { YandexMapsAPIWrapper } from '../services/yandex-maps-api-wrapper';
 
-import { IGeoObjectBase, IGeoObjectDataBase } from '../interfaces/igeobject';
+import { IGeoObjectBase, IGeoObjectDataBase } from '../interfaces/igeoobject';
 
 let geoObjectId = 0;
 

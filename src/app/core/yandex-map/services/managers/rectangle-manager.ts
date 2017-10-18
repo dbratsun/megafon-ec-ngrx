@@ -6,15 +6,15 @@ import { YandexMapsAPIWrapper } from '../yandex-maps-api-wrapper';
 import { GeoObjectManagerBase} from '../managers/geoobjectbase-manager';
 import { YaGeoObjectBase } from '../../directives/geoobjectbase';
 
-import { IGeoObjectBase, IPlacemark, IPlacemarkData } from '../../interfaces/igeoobject';
+import { IGeoObjectBase, IRectangle, IRectangleData } from '../../interfaces/igeoobject';
 
 
 @Injectable()
-export class PlacemarkManager extends GeoObjectManagerBase {
+export class RectangleManager extends GeoObjectManagerBase {
 
     createGeoObject(geoObject: IGeoObjectBase): Promise<ymaps.GeoObject> {
-        const data: IPlacemarkData = geoObject.getData() as IPlacemarkData;
-        return this._mapsWrapper.createPlacemark(
+        const data: IRectangleData = geoObject.getData() as IRectangleData;
+        return this._mapsWrapper.createRectangle(
             data.geometry, data.properties, data.options    
         );
     }

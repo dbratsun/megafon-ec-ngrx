@@ -2,20 +2,22 @@ import { Directive, EventEmitter, OnChanges, OnDestroy, AfterContentInit, Simple
 import { Subscription } from "rxjs/Subscription";
 
 import { YaGeoObjectBase } from '../directives/geoobjectbase';
-import { IGeoObjectBase, IPlacemark, IPlacemarkData } from '../interfaces/igeoobject';
-import { PlacemarkManager } from '../services/managers/placemark-manager';
+import { IGeoObjectBase, ICircle, ICircleData } from '../interfaces/igeoobject';
+import { CircleManager } from '../services/managers/circle-manager';
 
 @Directive({
-    selector: 'ya-placemark'
+    selector: 'ya-circle'
 })
-export class YaPlacemark extends YaGeoObjectBase implements IGeoObjectBase, IPlacemark, OnChanges, AfterContentInit {
+export class YaCircle extends YaGeoObjectBase implements IGeoObjectBase, ICircle, OnChanges, AfterContentInit {
 
-    @Input() latitude: number;
-    @Input() longitude: number;
+    // @Input() geometry: ymaps.ICircleGeometry[][][][] | number[][];
+    @Input() coordinates: number[];
+    @Input() radius: number;
+    @Input() circleOverlay: string = 'default#circle';
     @Input() cursor: string = 'pointer';
     @Input() draggable: boolean = false;
 
-    constructor(private manager: PlacemarkManager) {
+    constructor(private manager: CircleManager) {
         super(manager)
     }
 
@@ -28,15 +30,16 @@ export class YaPlacemark extends YaGeoObjectBase implements IGeoObjectBase, IPla
     }
 
     toString(): string {
-        return 'YaPlacemark-' + this.id;
+        return 'YaCircle-' + this.id;
     }
 
-    getData(): IPlacemarkData {
+    getData(): ICircleData {
         return {
-            geometry: [this.latitude, this.longitude],
+            geometry: [this.coordinates, this.radius],
             properties: {
             },
             options: {
+                circleOverlay: this.circleOverlay,
                 cursor: this.cursor,
                 draggable: this.draggable
             }

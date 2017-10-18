@@ -7,7 +7,7 @@ import { YaGeoObjectBase } from '../../directives/geoobjectbase';
 import { YandexMapsAPIWrapper } from '../yandex-maps-api-wrapper';
 
 @Injectable()
-export class GeoObjectManager{
+export class GeoObjectManager {
 
     protected _geoObjects: Map<YaGeoObjectBase, Promise<ymaps.GeoObject>> = new Map<YaGeoObjectBase, Promise<ymaps.GeoObject>>();
 

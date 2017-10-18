@@ -2362,6 +2362,149 @@ declare namespace ymaps {
 		yandexMapDisablePoiInteractivity?: boolean;
 	}
 
+	// dsb - added on 18/10/2017
+
+	export class Polyline extends GeoObject {
+		constructor(geometry: number[][] | object | ILineStringGeometry, properties: object | IDataManager, options?: IPolylineOptions) 
+	}
+
+	export interface IPolylineOptions {
+		cursor?: string;
+		draggable?: boolean;
+		[index: string]: any;
+	}
+
+	export class Rectangle extends GeoObject {
+		constructor(geometry: number[][] | object | IRectangleGeometry, properties: object | IDataManager, options?: IRectangleOptions)
+	}
+
+	export interface IRectangleOptions {
+		cursor?: string;
+		draggable?: boolean;
+		[index: string]: any;
+	}
+
+	export interface IRectangleGeometry extends IGeometry, IRectangleGeometryAccess {
+	}
+
+	export interface IRectangleGeometryAccess extends IFreezable {
+
+		contains(position: number[]): boolean;
+
+		getClosest(anchorPosition: number[]): object;
+
+		getCoordinates(): number[][];
+		
+		setCoordinates(coordinates: number[][]): IRectangleGeometryAccess;
+
+	}
+
+	export class Polygon extends GeoObject {
+		constructor(geometry: number[][][] | object | IPolygonGeometry, properties: object | IDataManager, options?: IPolygonOptions)
+	}
+
+	export interface IPolygonOptions {
+		cursor?: string;
+		draggable?: boolean;
+		[index: string]: any;
+	}
+	
+	export interface IPolygonGeometry extends IGeometry, IPolygonGeometryAccess {
+	}
+
+	export interface IPolygonGeometryAccess extends IFreezable {
+
+		contains(position: number[]): boolean;
+
+		get(index: number): number[][];
+
+		getChildGeometry(index: number): ILinearRingGeometryAccess		
+
+		getClosest(anchorPosition: number[]): object;
+
+		getCoordinates(): number[][][];
+
+		getFillRule(): string;
+
+		getLength(): number;
+
+		insert(index: number, path: number[][]): IPolygonGeometryAccess;
+
+		remove(index: number): ILinearRingGeometryAccess;		
+
+		set(index: number, path: number[]): IPolygonGeometryAccess;
+
+		setCoordinates(coordinates: number[][][]): IPolygonGeometryAccess;
+
+		setFillRule(fillRule: string): IPolygonGeometryAccess;
+
+		splice(index: number, length: number): ILinearRingGeometryAccess;
+		
+	}
+
+	export interface ILinearRingGeometryAccess {
+		contains(position: number[]): boolean;
+		
+		get(index: number): number[];
+
+		getChildGeometry(index: number): IPointGeometryAccess		
+
+		getClosest(anchorPosition: number[]): object;
+
+		getCoordinates(): number[][];
+
+		getFillRule(): string;
+
+		getLength(): number;
+
+		insert(index: number, coordinates: number[]): ILinearRingGeometryAccess;
+
+		remove(index: number): number[];		
+
+		set(index: number, coordinates: number[]): ILinearRingGeometryAccess;
+
+		setCoordinates(coordinates: number[][]): ILinearRingGeometryAccess;
+
+		setFillRule(fillRule: string): ILinearRingGeometryAccess;
+
+		splice(index: number, length: number): number[][];
+
+	}
+	
+	export interface IObjectManagerFeature {
+		geometry?: IGeometry | IGeometryJson,
+		properties?: IDataManager | object
+	}
+
+	export interface IObjectManagerOptions {
+		circleOverlay?: string,
+		cursor?: string,
+		draggable?: boolean,
+		[index: string]: any		
+	}
+
+	export class ObjectManager implements ICustomizable, IEventEmitter, IGeoObject, IParentOnMap {
+		constructor(feature?: IObjectManagerFeature, options?: IObjectManagerOptions);
+		
+		balloon: geoObject.Balloon;
+		editor: IGeometryEditor;
+		events: event.Manager;
+		geometry: IGeometry | null;
+		hint: geoObject.Hint;
+		options: option.Manager;
+		properties: data.Manager;
+		state: data.Manager;
+
+		add(objects: Object[][] | Object[] | string): ObjectManager;
+		getBounds(): number[][] | null;
+		getFilter(): string | null;
+		getMap(): Map;
+		// todo: изменить на возвращаемый тип
+		getObjectState(id: Object): Object;
+		getOverlay(): Promise<IOverlay>;
+	}
+	//
+
 	export class Placemark extends GeoObject {
 		constructor(geometry: number[] | object | IPointGeometry, properties: object | IDataManager, options?: IPlacemarkOptions)
 	}

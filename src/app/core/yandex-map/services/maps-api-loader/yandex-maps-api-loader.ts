@@ -21,7 +21,7 @@ export class YandexMapsApiLoader implements MapsAPILoader {
         script.defer = true;
         script.id = 'YaScript';
         const callbackName: string = `angular2YAMapsAPILoader`;
-        script.src = 'https://api-maps.yandex.ru/2.1/?lang=ru_RU&callback=angular2YAMapsAPILoader';
+        script.src = 'https://api-maps.yandex.ru/2.1/?lang=ru_RU&Load=package.full&callback=angular2YAMapsAPILoader';
             
         this._scriptLoadingPromise = new Promise<void>((resolve: Function, reject: Function) => {
             script.onload = () => {resolve();};

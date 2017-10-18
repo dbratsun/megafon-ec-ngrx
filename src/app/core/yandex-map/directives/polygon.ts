@@ -2,20 +2,19 @@ import { Directive, EventEmitter, OnChanges, OnDestroy, AfterContentInit, Simple
 import { Subscription } from "rxjs/Subscription";
 
 import { YaGeoObjectBase } from '../directives/geoobjectbase';
-import { IGeoObjectBase, IPlacemark, IPlacemarkData } from '../interfaces/igeoobject';
-import { PlacemarkManager } from '../services/managers/placemark-manager';
+import { IGeoObjectBase, IPolygon, IPolygonData } from '../interfaces/igeoobject';
+import { PolygonManager } from '../services/managers/polygon-manager';
 
 @Directive({
-    selector: 'ya-placemark'
+    selector: 'ya-polygon'
 })
-export class YaPlacemark extends YaGeoObjectBase implements IGeoObjectBase, IPlacemark, OnChanges, AfterContentInit {
+export class YaPolygon extends YaGeoObjectBase implements IGeoObjectBase, IPolygon, OnChanges, AfterContentInit {
 
-    @Input() latitude: number;
-    @Input() longitude: number;
+    @Input() geometry: number[][][] | ymaps.IPolygonGeometry;
     @Input() cursor: string = 'pointer';
     @Input() draggable: boolean = false;
 
-    constructor(private manager: PlacemarkManager) {
+    constructor(private manager: PolygonManager) {
         super(manager)
     }
 
@@ -28,12 +27,12 @@ export class YaPlacemark extends YaGeoObjectBase implements IGeoObjectBase, IPla
     }
 
     toString(): string {
-        return 'YaPlacemark-' + this.id;
+        return 'YaPolygon-' + this.id;
     }
 
-    getData(): IPlacemarkData {
+    getData(): IPolygonData {
         return {
-            geometry: [this.latitude, this.longitude],
+            geometry: this.geometry,
             properties: {
             },
             options: {
