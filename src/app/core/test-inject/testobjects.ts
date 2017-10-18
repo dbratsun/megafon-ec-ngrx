@@ -1,42 +1,65 @@
-import { Injectable, Directive, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Injectable, Directive, Component, Input, OnChanges, DoCheck, SimpleChanges } from '@angular/core';
 import { Marker, MarkerWrapper } from './testwrapper';
-import { Manager } from './testmanager';
-import { IBaseObject } from './testinterfaces';
+import { Manager, ManagerNewBase, ChildObjectManagerNew } from './testmanager';
+import { IBaseObject, IBaseObjectData, IChildObject, IChildObjectData } from './testinterfaces';
 
 @Injectable()
-export abstract class BaseObject implements IBaseObject {
-    constructor(protected _manager: Manager) {
+export abstract class BaseObject implements IBaseObject, DoCheck {
+    private _addedToManager: boolean = false;
+
+    constructor(protected _manager: ManagerNewBase) {
     }
 
     getName(): string {
         return 'BaseObject';
+    }
+
+    abstract getData(): IBaseObjectData; 
+
+    // todo: check the performance !
+    ngDoCheck() {
+        this.changesIntern();        
+    }
+
+    protected changesIntern() {
+        if (!this._addedToManager) {
+            this._manager.createObject(this);
+            this._addedToManager = true;
+        }    
     }
 }
 
 @Directive({
     selector: 'child-object'
 })
-export class ChildObject extends BaseObject implements OnChanges, IBaseObject {
+export class ChildObject extends BaseObject implements OnChanges, IChildObject {
     @Input() position: number = 0;
     @Input() title: string = '';
 
-    private _addedToManager: boolean = false;
+    constructor(_manager: ChildObjectManagerNew) {
+        super(_manager);
+    }
 
     ngOnChanges(changes: SimpleChanges) {   
-        if (!this._addedToManager) {
-            this._manager.createObject(this);
-            this._addedToManager = true;
-        }
+        const t = this.title;
+        // this.changesIntern();
     }
 
     getName(): string {
         return 'ChildObject';
     }
+
+    getData(): IChildObjectData {
+        return {
+            position: this.position,
+            title: this.title
+        }
+    }
 }
 
 @Component({
     selector: 'map-object',
-    providers: [MarkerWrapper, Manager],
+    providers: [MarkerWrapper, Manager, ChildObjectManagerNew],
     template: `
         <div class="map-object-content">
             <ng-content></ng-content>

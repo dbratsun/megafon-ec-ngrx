@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChange, SimpleChanges } from '@angular/core';
 import { YandexMapsAPIWrapper } from '../services/yandex-maps-api-wrapper';
 import { GeoObjectManager } from '../services/managers/geoobject-manager';
-// import { PlacemarkManager } from '../services/managers/placemark-manager';
+import { PlacemarkManager } from '../services/managers/placemark-manager';
 
 
 // import * as mapTypes from '../services/yandex-maps-types';
@@ -22,7 +22,7 @@ export interface MouseEvent {
 
 @Component({
     selector: 'ya-map',
-    providers: [YandexMapsAPIWrapper, GeoObjectManager],
+    providers: [YandexMapsAPIWrapper, PlacemarkManager],
     styles: [`
         .ya-map-container-inner {
             width: inherit;

@@ -8,15 +8,15 @@ import { MapsAPILoader } from "app/core/yandex-map/services/maps-api-loader/maps
 import { BROWSER_GLOBALS_PROVIDERS } from './utils/browser-globals';
 
 // import { YaGeoObject } from './directives/geoobject';
-import { YaPlacemark1 } from './directives/geoobject';
-import { GeoObjectManager } from './services/managers/geoobject-manager';
+import { YaPlacemark } from './directives/placemark';
+// import { GeoObjectManager } from './services/managers/geoobject-manager';
 
 export function coreDirectives() {
     return [ 
         YaMap, 
         // YaGeoObject, 
         // YaPlacemark,
-        YaPlacemark1 
+        YaPlacemark 
     ];
 }
 

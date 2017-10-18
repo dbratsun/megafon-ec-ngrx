@@ -51,12 +51,14 @@
         (centerChange)="onCenterChange($event)"
         (zoomChange)="onZoomChange($event)"
         (mouseEvent)="onMouseEvent($event)">
-        <ya-placemark-1 [latitude]="55.76" [longitude]="37.64" [draggable]="true"></ya-placemark-1>
-        <ya-placemark-1 [latitude]="55.77" [longitude]="37.65" [draggable]="true"></ya-placemark-1>
+        <ya-placemark [latitude]="55.76" [longitude]="37.64" [draggable]="true"></ya-placemark>
+        <ya-placemark [latitude]="55.77" [longitude]="37.65" [draggable]="true"></ya-placemark>
       </ya-map>
   </div>
+  <!--
   <map-object>
     <child-object position="1" title="new title 1"></child-object>
     <child-object position="2" title="new title 2"></child-object>
   </map-object>
+  -->
 </div>

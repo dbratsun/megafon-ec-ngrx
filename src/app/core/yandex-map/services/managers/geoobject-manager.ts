@@ -1,20 +1,20 @@
+
 import { Injectable, Inject, NgZone } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
 
-import { YaGeoObjectBase } from '../../directives/geoobject';
+import { YaGeoObjectBase } from '../../directives/geoobjectbase';
 import { YandexMapsAPIWrapper } from '../yandex-maps-api-wrapper';
-import { YaPlacemark1 } from "../../directives/geoobject";
 
 @Injectable()
 export class GeoObjectManager{
 
-    private yp: YaPlacemark1;
     protected _geoObjects: Map<YaGeoObjectBase, Promise<ymaps.GeoObject>> = new Map<YaGeoObjectBase, Promise<ymaps.GeoObject>>();
 
-    constructor(/*@Inject('wrapper')*/ protected _mapsWrapper: YandexMapsAPIWrapper, protected _zone: NgZone) { }
+    constructor(protected _mapsWrapper: YandexMapsAPIWrapper, protected _zone: NgZone) { }
 
     deleteGeoObject(geoObjectBase: YaGeoObjectBase): Promise<void> {
+        /*
         const g = this._geoObjects.get(geoObjectBase);
         if (g == null) {
             // already deleted
@@ -26,6 +26,8 @@ export class GeoObjectManager{
                 this._geoObjects.delete(geoObjectBase);
             });
         });
+        */
+        return Promise.resolve();
     }
 
     addGeoObject(geoObject: YaGeoObjectBase) {
@@ -44,15 +46,11 @@ export class GeoObjectManager{
             )
             this._geoObjects.set(geoObject, o);            
         }
-        */
         let o = geoObject.createGeoObject();
         this._geoObjects.set(geoObject, o);            
+        */
     }
     
-    public mapsWrapper(): YandexMapsAPIWrapper {
-        return this._mapsWrapper;
-    }
-
     /*
     createPlacemark(geometry: number[] | object | ymaps.IPointGeometry, properties: object | ymaps.IDataManager, options?: ymaps.IPlacemarkOptions) {
         let o = this._mapsWrapper.createPlacemark(geometry, properties, options)

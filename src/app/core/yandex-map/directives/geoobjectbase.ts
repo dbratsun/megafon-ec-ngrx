@@ -1,19 +1,21 @@
-import { Directive, EventEmitter, OnChanges, OnDestroy, AfterContentInit, SimpleChanges, Input, Output, Inject, Injector, Injectable } from '@angular/core';
+import { Directive, EventEmitter, OnChanges, OnDestroy, DoCheck, AfterContentInit, SimpleChanges, Input, Output, Inject, Injector, Injectable } from '@angular/core';
 import { Subscription } from "rxjs/Subscription";
 
-import { GeoObjectManager } from '../services/managers/geoobject-manager';
+import { GeoObjectManagerBase } from '../services/managers/geoobjectbase-manager';
 import { YandexMapsAPIWrapper } from '../services/yandex-maps-api-wrapper';
+
+import { IGeoObjectBase, IGeoObjectDataBase } from '../interfaces/igeobject';
 
 let geoObjectId = 0;
 
 @Injectable()
-export abstract class YaGeoObjectBase implements OnDestroy {
+export abstract class YaGeoObjectBase implements IGeoObjectBase, OnDestroy, DoCheck {
 
     private _id: string;
     private _addedToManager: boolean = false;
     private _observableSubscriptions: Subscription[] = [];
     
-    constructor(protected _geoObjectManager: GeoObjectManager) {
+    constructor(protected _geoObjectManager: GeoObjectManagerBase) {
         this._id = (geoObjectId++).toString();
     }
     
@@ -22,20 +24,22 @@ export abstract class YaGeoObjectBase implements OnDestroy {
         this._observableSubscriptions.forEach((s) => s.unsubscribe());
     }
 
-    id(): string {
-        return this._id;
-    }
-
-    protected onChanges(changes: SimpleChanges) {
+    ngDoCheck() {
         if (!this._addedToManager) {
             this._geoObjectManager.addGeoObject(this);
             this._addedToManager = true;
         }
     }
 
+    abstract getData(): IGeoObjectDataBase;
+
+    id(): string {
+        return this._id;
+    }
+
     abstract toString(): string;    
 
-    abstract createGeoObject(): Promise<ymaps.GeoObject>
+    // abstract createGeoObject(): Promise<ymaps.GeoObject>
 }
 
 /*
@@ -73,39 +77,3 @@ export class YaGeoObject extends YaGeoObjectBase implements OnChanges, AfterCont
 }
 */
 
-@Directive({
-    selector: 'ya-placemark-1'
-})
-export class YaPlacemark1 extends YaGeoObjectBase implements OnChanges, AfterContentInit {
-
-    @Input() latitude: number;
-    @Input() longitude: number;
-    @Input() cursor: string = 'pointer';
-    @Input() draggable: boolean = false;
-
-    ngAfterContentInit() {
-
-    }
-
-    ngOnChanges(changes: SimpleChanges) {
-        this.onChanges(changes);
-    }
-
-    toString(): string {
-        return 'YaPlacemark-' + this.id;
-    }
-            
-    createGeoObject(): Promise<ymaps.Placemark> {
-        return this._geoObjectManager.mapsWrapper().createPlacemark(
-            [this.latitude, this.longitude],
-            {
-            },
-            {
-                cursor: this.cursor,
-                draggable: this.draggable
-            }
-        )
-
-    }
-
-}
