@@ -2365,7 +2365,7 @@ declare namespace ymaps {
 	// dsb - added on 18/10/2017
 
 	export class Polyline extends GeoObject {
-		constructor(geometry: number[][] | object | ILineStringGeometry, properties: object | IDataManager, options?: IPolylineOptions) 
+		constructor(geometry: number[][] | object | ILineStringGeometry, properties: object | IDataManager, options?: IPolylineOptions)
 	}
 
 	export interface IPolylineOptions {
@@ -2394,7 +2394,7 @@ declare namespace ymaps {
 		getClosest(anchorPosition: number[]): object;
 
 		getCoordinates(): number[][];
-		
+
 		setCoordinates(coordinates: number[][]): IRectangleGeometryAccess;
 
 	}
@@ -2408,7 +2408,7 @@ declare namespace ymaps {
 		draggable?: boolean;
 		[index: string]: any;
 	}
-	
+
 	export interface IPolygonGeometry extends IGeometry, IPolygonGeometryAccess {
 	}
 
@@ -2418,7 +2418,7 @@ declare namespace ymaps {
 
 		get(index: number): number[][];
 
-		getChildGeometry(index: number): ILinearRingGeometryAccess		
+		getChildGeometry(index: number): ILinearRingGeometryAccess
 
 		getClosest(anchorPosition: number[]): object;
 
@@ -2430,7 +2430,7 @@ declare namespace ymaps {
 
 		insert(index: number, path: number[][]): IPolygonGeometryAccess;
 
-		remove(index: number): ILinearRingGeometryAccess;		
+		remove(index: number): ILinearRingGeometryAccess;
 
 		set(index: number, path: number[]): IPolygonGeometryAccess;
 
@@ -2439,15 +2439,15 @@ declare namespace ymaps {
 		setFillRule(fillRule: string): IPolygonGeometryAccess;
 
 		splice(index: number, length: number): ILinearRingGeometryAccess;
-		
+
 	}
 
 	export interface ILinearRingGeometryAccess {
 		contains(position: number[]): boolean;
-		
+
 		get(index: number): number[];
 
-		getChildGeometry(index: number): IPointGeometryAccess		
+		getChildGeometry(index: number): IPointGeometryAccess
 
 		getClosest(anchorPosition: number[]): object;
 
@@ -2459,7 +2459,7 @@ declare namespace ymaps {
 
 		insert(index: number, coordinates: number[]): ILinearRingGeometryAccess;
 
-		remove(index: number): number[];		
+		remove(index: number): number[];
 
 		set(index: number, coordinates: number[]): ILinearRingGeometryAccess;
 
@@ -2470,12 +2470,13 @@ declare namespace ymaps {
 		splice(index: number, length: number): number[][];
 
 	}
-	
+
 	// https://tech.yandex.ru/maps/doc/jsapi/2.1/dg/concepts/object-manager/frontend-docpage/
+  // simple comment to test git
 
 	export namespace objectManager {
 
-		// todo: определить! 
+		// todo: определить!
 		export interface IReadOnlyCollection {
 
 		}
@@ -2523,7 +2524,7 @@ declare namespace ymaps {
 			constructor(collection: IReadOnlyCollection);
 
 			events: IEventManager;
-			
+
 			close(force?: boolean): Promise<ObjectManager>;
 			destroy(): void;
 			getData(): object | null;
@@ -2577,7 +2578,7 @@ declare namespace ymaps {
 	export interface IObjectManagerOptions extends IClustererOptions, IClusterPlacemarkOptions, IGeoObjectOptions {
 		clusterize?: boolean;
 		syncOverlayInit?: boolean;
-		viewportMargin?: number[][] | number[]; 
+		viewportMargin?: number[][] | number[];
 	}
 
 	export class ObjectManager implements ICustomizable, IEventEmitter, IGeoObject, IParentOnMap {
