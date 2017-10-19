@@ -113,6 +113,7 @@ export class YaMap implements OnChanges, OnInit, OnDestroy {
 
     private mapInit: boolean = false;
     private _observableSubscriptions: Subscription[] = [];
+    private _nativeMap: ymaps.Map;
 
     @Output() centerChange: EventEmitter<ymaps.LatLng> = new EventEmitter<ymaps.LatLng>();
     @Output() zoomChange: EventEmitter<number> = new EventEmitter<number>();
@@ -132,6 +133,10 @@ export class YaMap implements OnChanges, OnInit, OnDestroy {
 
     constructor(private _elem: ElementRef, private _mapsWrapper: YandexMapsAPIWrapper) {}
 
+    nativeMap() {
+        return this._nativeMap;
+    }
+
     ngOnInit() {
         const container = this._elem.nativeElement.querySelector('.ya-map-container-inner');
         this._initMapInstance(container);
@@ -140,7 +145,7 @@ export class YaMap implements OnChanges, OnInit, OnDestroy {
 
     ngOnDestroy() {
         this._observableSubscriptions.forEach((s) => s.unsubscribe());
-    }
+    }    
 
     ngOnChanges(changes: SimpleChanges) {
         if (this.mapInit) {
@@ -320,7 +325,10 @@ export class YaMap implements OnChanges, OnInit, OnDestroy {
             yandexMapDisablePoiInteractivity: this.yandexMapDisablePoiInteractivity
         })
             .then(() => this._mapsWrapper.getNativeMap())
-            .then(map => this.mapReady.emit(map));
+            .then(map => {
+                this._nativeMap = map;
+                this.mapReady.emit(map)
+            });
         this._handleMapActionBegin();
         this._handleMapActionBreak();
         this._handleMapActionEnd();

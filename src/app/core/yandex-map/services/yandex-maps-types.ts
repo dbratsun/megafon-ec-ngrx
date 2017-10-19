@@ -28,10 +28,10 @@ declare namespace ymaps {
 	//[number, number]
 	//[[number, number], [number, number]]
 
-  type LatLng = {
-      lat: number,
-      lng: number
-  };
+	type LatLng = {
+		lat: number,
+		lng: number
+	};
 
 	export namespace behavior {
 		export class DblClickZoom implements IBehavior {
@@ -2320,16 +2320,16 @@ declare namespace ymaps {
 		constructor(name: string, layers: (IClassConstructor<Layer> | string)[])
 	}
 
-  export type MapStateType = "yandex#map" | "yandex#satellite" | "yandex#hybrid";
-  export const DefaultMapStateType = 'yandex#map';
+	export type MapStateType = "yandex#map" | "yandex#satellite" | "yandex#hybrid";
+	export const DefaultMapStateType = 'yandex#map';
 
-  export type BehaviorsType =
-    'default'|'drag'|'scrollZoom'|'dblClickZoom'|'multiTouch'|'rightMouseButtonMagnifier'|
-    'leftMouseButtonMagnifier'|'ruler'|'routeEditor';
+	export type BehaviorsType =
+		'default'|'drag'|'scrollZoom'|'dblClickZoom'|'multiTouch'|'rightMouseButtonMagnifier'|
+		'leftMouseButtonMagnifier'|'ruler'|'routeEditor';
 
-  export type ControlType =
-    'fullscreenControl'|'geolocationControl'|'routeEditor'|'rulerControl'|'searchControl'|'trafficControl'|
-    'typeSelector'|'zoomControl'|'smallMapDefaultSet'|'mediumMapDefaultSet'|'largeMapDefaultSet'|'default';
+	export type ControlType =
+		'fullscreenControl'|'geolocationControl'|'routeEditor'|'rulerControl'|'searchControl'|'trafficControl'|
+		'typeSelector'|'zoomControl'|'smallMapDefaultSet'|'mediumMapDefaultSet'|'largeMapDefaultSet'|'default';
 
 
 	interface IMapState {
@@ -2342,7 +2342,7 @@ declare namespace ymaps {
 		zoom?: number;
 	}
 
-  export type AutoFitToViewportType = "none"|"ifNull"|"always";
+  	export type AutoFitToViewportType = "none"|"ifNull"|"always";
 
 	interface IMapOptions {
 		autoFitToViewport?: AutoFitToViewportType;
@@ -2471,29 +2471,125 @@ declare namespace ymaps {
 
 	}
 	
-	export interface IObjectManagerFeature {
-		geometry?: IGeometry | IGeometryJson,
-		properties?: IDataManager | object
+	// https://tech.yandex.ru/maps/doc/jsapi/2.1/dg/concepts/object-manager/frontend-docpage/
+
+	export namespace objectManager {
+
+		// todo: определить! 
+		export interface IReadOnlyCollection {
+
+		}
+
+		export class Balloon implements IBalloonManager<ObjectManager> {
+			constructor(collection: IReadOnlyCollection);
+
+			events: IEventManager;
+
+			autoPan(): Promise<ObjectManager>;
+			close(force: boolean): Promise<ObjectManager>;
+			destroy();
+			getData(): object | null;
+			getOptions(): IOptionManager | null;
+			getOverlay(): Promise<IOverlay>;
+			getOverlaySync(): IOverlay | null;
+			getPosition(): number[] | null;
+			isOpen(id?: Object): boolean;
+			open(objectId: Object /*, anchorPixelPosition: ?*/): Promise<ObjectManager>;
+			setData(objectData: Object): Promise<ObjectManager>;
+			setOptions(options: Object): Promise<ObjectManager>;
+			setPosition(position: Object): Promise<ObjectManager>;
+		}
+
+		export class ClusterCollection implements ICustomizable, IEventEmitter {
+			constructor();
+
+			balloon: objectManager.Balloon;
+			events: IEventManager;
+			hint: objectManager.Hint;
+			options: option.Manager;
+			overlays: objectManager.OverlayCollection;
+			state: data.Manager;
+
+			// todo: each(callback, context);
+			getAll(): Object[];
+			getById(id: string): Object | null;
+			getIterator(): IIterator;
+			getLength(): number;
+			getObjectManager(): ObjectManager;
+			setClusterOptions(objectId: string, options: Object): objectManager.ObjectCollection;
+		}
+
+		export class Hint implements IHintManager<ObjectManager> {
+			constructor(collection: IReadOnlyCollection);
+
+			events: IEventManager;
+			
+			close(force?: boolean): Promise<ObjectManager>;
+			destroy(): void;
+			getData(): object | null;
+			getOptions(): IOptionManager | null;
+			getOverlay(): Promise<IOverlay | null>;
+			getOverlaySync(): IOverlay | null;
+			getPosition(): number[] | null;
+			isOpen(id?: Object): boolean;
+			open(objectId?: Object, position?: number[]): Promise<ObjectManager>;
+			setData(objectData: Object): Promise<ObjectManager>;
+			setOptions(options: object): Promise<ObjectManager>;
+			setPosition(position: number[]): Promise<ObjectManager>;
+		}
+
+		export class ObjectCollection implements ICollection, ICustomizable{
+			constructor();
+
+			balloon: objectManager.Balloon;
+			events: IEventManager;
+			hint: objectManager.Hint;
+			options: option.Manager;
+			overlays: objectManager.OverlayCollection;
+
+			add(data: Object[][] | Object[] | Object | string): this;
+			// todo: each(callback, context);
+			getAll(): Object[];
+			getById(id: number): Object | null;
+			getIterator(): IIterator;
+			getLength(): number;
+			getObjectManager(): ObjectManager;
+			remove(data: Object[][] | Object[] | Object | string): this;
+			removeAll(): objectManager.ObjectCollection;
+			setObjectOptions(objectId: Object, options: Object): objectManager.ObjectCollection;
+		}
+
+		export class OverlayCollection implements ICustomizable, IEventEmitter{
+			constructor();
+
+			events: IEventManager;
+			options: IOptionManager;
+
+			// todo: each(callback, context);
+			getAll: Object[];
+			getById(id: number): Object | null;
+			getId(overlay: IOverlay): number | null;
+			getIterator(): IIterator;
+			getLength(): number;
+		}
 	}
 
-	export interface IObjectManagerOptions {
-		circleOverlay?: string,
-		cursor?: string,
-		draggable?: boolean,
-		[index: string]: any		
+	export interface IObjectManagerOptions extends IClustererOptions, IClusterPlacemarkOptions, IGeoObjectOptions {
+		clusterize?: boolean;
+		syncOverlayInit?: boolean;
+		viewportMargin?: number[][] | number[]; 
 	}
 
 	export class ObjectManager implements ICustomizable, IEventEmitter, IGeoObject, IParentOnMap {
-		constructor(feature?: IObjectManagerFeature, options?: IObjectManagerOptions);
-		
-		balloon: geoObject.Balloon;
-		editor: IGeometryEditor;
-		events: event.Manager;
+		constructor(options?: IObjectManagerOptions);
+
+		clusters: objectManager.ClusterCollection;
+		events: IEventManager;
 		geometry: IGeometry | null;
-		hint: geoObject.Hint;
-		options: option.Manager;
-		properties: data.Manager;
-		state: data.Manager;
+		objects: objectManager.ObjectCollection;
+		options: IOptionManager;
+		properties: IDataManager;
+		state: IDataManager;
 
 		add(objects: Object[][] | Object[] | string): ObjectManager;
 		getBounds(): number[][] | null;
@@ -2502,8 +2598,16 @@ declare namespace ymaps {
 		// todo: изменить на возвращаемый тип
 		getObjectState(id: Object): Object;
 		getOverlay(): Promise<IOverlay>;
+		getOverlaySync(): IOverlay | null;
+		getParent(): IControlParent | null;
+		getPixelBounds(): number[][] | null;
+		remove(objects: Object[][] | Object[] | string): ObjectManager;
+		removeAll(): ObjectManager;
+		setFilter(filterFunction: string);
+		setParent(parent: IControlParent | null): this;
 	}
-	//
+
+	// end of 18/10/2017
 
 	export class Placemark extends GeoObject {
 		constructor(geometry: number[] | object | IPointGeometry, properties: object | IDataManager, options?: IPlacemarkOptions)

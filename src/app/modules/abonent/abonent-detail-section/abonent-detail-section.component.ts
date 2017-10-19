@@ -1,5 +1,5 @@
 import { YaMap, MouseEvent, MouseEventType } from '../../../core/yandex-map/directives/map';
-import { Component, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, OnChanges, SimpleChanges, ElementRef, ViewChild, QueryList } from '@angular/core';
 import { Store } from "@ngrx/store";
 import { ApplicationState } from "../../../core/store/application-state";
 import { Observable } from "rxjs/Observable";
@@ -43,6 +43,10 @@ export class AbonentDetailSectionComponent implements OnInit {
   controls: ymaps.ControlKey[];
   allControls: ymaps.ControlKey[];
 
+  @ViewChild('map') map: YaMap;
+  nmap: ymaps.Map;
+  // @ViewChild('map') map: ElementRef;
+
   constructor(private store: Store<ApplicationState>) {
     this.abonentName$ = store.select(abonentNameSelector);
     this.abonentDetails$ = store.select(abonentDetailsSelector);
@@ -69,6 +73,7 @@ export class AbonentDetailSectionComponent implements OnInit {
   }
 
   onCenterChange(center: ymaps.LatLng) {
+    const map = this.map.nativeMap();
     this.center = center;
   }
 
