@@ -163,5 +163,34 @@ export class YandexMapsAPIWrapper {
         })
     }
 
+    // ObjectManager
+
+    createObjectManager(options?: ymaps.IObjectManagerOptions) {
+        return this._map.then((map: ymaps.Map) => {
+            let om = new ymaps.ObjectManager(options);
+            map.geoObjects.add(om);
+            return om;
+        })
+    }
+
+    removeObjectManager(manager: ymaps.ObjectManager) {
+        return this._map.then((map: ymaps.Map) => {
+            map.geoObjects.remove(manager);
+            return manager;
+        })
+    }
+
+    getObjectManagerClusters(manager: ymaps.ObjectManager): Promise<ymaps.objectManager.ClusterCollection> {
+        return this._map.then((map: ymaps.Map) => {
+            return manager.clusters;
+        })
+    }
+
+    addObjectsToObjectManager(manager: ymaps.ObjectManager, objects: string): Promise<ymaps.ObjectManager> {
+        return this._map.then((map: ymaps.Map) => {
+            return manager.add(objects);
+        })
+    }
+
 }
 

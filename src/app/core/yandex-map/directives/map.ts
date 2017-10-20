@@ -9,22 +9,21 @@ import { RectangleManager } from '../services/managers/rectangle-manager';
 import { PolygonManager } from "../services/managers/polygon-manager";
 import { CircleManager } from "../services/managers/circle-manager";
 
-export enum MouseEventType {
-  click, dblClick, mousedown, mouseenter, mouseleave, mousemove, mouseup, wheel
-}
+import { ObjectManagerManager } from '../services/managers/objectmanager-manager';
 
-export interface MouseEvent {
-    type: MouseEventType;
-    name: string;
-    coords: number[];
-    globalPixels: number[];
-    pagePixels: number[];
-    clientPixels: number[];
-}
+import { MouseEvent, MouseEventType } from "../interfaces/events";
 
 @Component({
     selector: 'ya-map',
-    providers: [YandexMapsAPIWrapper, PlacemarkManager, PolylineManager, RectangleManager, PolygonManager, CircleManager],
+    providers: [
+        YandexMapsAPIWrapper, 
+        PlacemarkManager, 
+        PolylineManager, 
+        RectangleManager, 
+        PolygonManager, 
+        CircleManager, 
+        ObjectManagerManager
+    ],
     styles: [`
         .ya-map-container-inner {
             width: inherit;
@@ -529,6 +528,7 @@ export class YaMap implements OnChanges, OnInit, OnDestroy {
     }
 
     // wheel s. _handleMapMouseEvents
+    /*
     private _handleWheel() {
       const s = this._mapsWrapper.subscribeToMapEvent<any>('wheel').subscribe((event: any) => {
         let action = event.get('type');
@@ -539,7 +539,7 @@ export class YaMap implements OnChanges, OnInit, OnDestroy {
       })
       this._observableSubscriptions.push(s);
     }
-
+    */
     
     private _handleMapMouseEvents() {
         type Event = {type: MouseEventType, name: string};

@@ -24,7 +24,19 @@ declare namespace ymaps {
 												 options: object) => Promise<string | IClassConstructor<IOverlay>>);
 	type InteractivityModelKey = "default#opaque" | "default#geoObject" | "default#layer" | "default#transparent" | "default#silent" | string;
 
-	type PresetKey = string; //option.presetStorage
+	// dsb, added on 20/10/2017
+
+	// deleted: type PresetKey = string; //option.presetStorage
+
+	type PresetKey = "" |
+		"islands#blueIcon" | "islands#redIcon" | "islands#darkOrangeIcon" | "islands#nightIcon" | "islands#darkBlueIcon" | "islands#pinkIcon" |
+		"islands#grayIcon" | "islands#brownIcon" | "islands#darkGreenIcon" | "islands#violetIcon" | "islands#blackIcon" | "islands#yellowIcon" |
+		"islands#greenIcon" | "islands#orangeIcon" | "islands#lightBlueIcon" | "islands#oliveIcon"
+
+	type BalloonContentLayoutKey = "cluster#balloonTwoColumns" | "cluster#balloonCarousel" | "cluster#balloonAccordion";
+
+	//
+
 	//[number, number]
 	//[[number, number], [number, number]]
 
@@ -2026,8 +2038,18 @@ declare namespace ymaps {
 		geoObjects: IGeoObject[];
 	}
 
+	// dsb, created on 20/10/2017
+
+	export type ClusterPlacemarkOptionsIconsType = {
+		href: string;
+		size: number[];
+		ooffset: number[];
+		shape?: IShape | IGeometryJson;
+	}
+
 	interface IClusterPlacemarkOptions {
-		balloonContentLayout?: "cluster#balloonTwoColumns" | "cluster#balloonCarousel" | "cluster#balloonAccordion" | string | IClassConstructor<ILayout>;
+		// balloonContentLayout?: "cluster#balloonTwoColumns" | "cluster#balloonCarousel" | "cluster#balloonAccordion" | string | IClassConstructor<ILayout>;
+		balloonContentLayout?: BalloonContentLayoutKey | string | IClassConstructor<ILayout>;
 		balloonContentLayoutHeight?: number;
 		balloonContentLayoutWidth?: number;
 		balloonItemContentLayout?: ILayout | string;
@@ -2038,12 +2060,15 @@ declare namespace ymaps {
 		iconColor?: string;
 		iconContentLayout?: string | IClassConstructor<ILayout>;
 		iconLayout?: string | IClassConstructor<ILayout>;
+		/*
 		icons?: {
 			href: string;
 			size: number[];
 			ooffset: number[];
 			shape?: IShape | IGeometryJson;
-		}[];
+		}
+		*/
+		icons?: ClusterPlacemarkOptionsIconsType[];
 		iconShape?: IGeometryJson;
 		interactivityModel?: InteractivityModelKey;
 		numbers?: number[];
@@ -2052,6 +2077,8 @@ declare namespace ymaps {
 		openHintOnHover?: boolean;
 		zIndexHover?: number;
 	}
+
+	//
 
 	export class Collection implements ICollection, collection.Item {
 		constructor(options?: object);
@@ -2472,7 +2499,7 @@ declare namespace ymaps {
 	}
 
 	// https://tech.yandex.ru/maps/doc/jsapi/2.1/dg/concepts/object-manager/frontend-docpage/
-  // simple comment to test git
+  	// simple comment to test git
 
 	export namespace objectManager {
 
@@ -2575,10 +2602,101 @@ declare namespace ymaps {
 		}
 	}
 
+
 	export interface IObjectManagerOptions extends IClustererOptions, IClusterPlacemarkOptions, IGeoObjectOptions {
 		clusterize?: boolean;
 		syncOverlayInit?: boolean;
 		viewportMargin?: number[][] | number[];
+
+		gridSize?: number;
+		groupByCoordinates?: boolean;
+		margin?: number[][] | number[];
+		maxZoom?: number[]; 
+		minClusterSize?: number;
+		preset?: PresetKey;
+		showInAlphabeticalOrder?: boolean;
+		useMapMargin?: boolean;
+		zoomMargin?: number[][] | number[];
+
+		clusterBalloonContentLayout?: BalloonContentLayoutKey | string | IClassConstructor<ILayout>;
+		clusterBalloonContentLayoutHeight?: number;
+		clusterBalloonContentLayoutWidth?: number;
+		clusterBalloonItemContentLayout?: ILayout | string;
+		clusterBalloonPanelContentLayout?: string | IClassConstructor<ILayout>;
+		clusterCursor?: string;
+		clusterDisableClickZoom?: boolean;
+		clusterHideIconOnBalloonOpen?: boolean;
+		clusterIconColor?: string;
+		clusterIconContentLayout?: string | IClassConstructor<ILayout>;
+		clusterIconLayout?: string | IClassConstructor<ILayout>;
+		clusterIcons?: ClusterPlacemarkOptionsIconsType[];
+		clusterIconShape?: IGeometryJson;
+		clusterInteractivityModel?: InteractivityModelKey;
+		clusterNumbers?: number[];
+		clusterOpenBalloonOnClick?: boolean;
+		clusterOpenEmptyHint?: boolean;
+		clusterOpenHintOnHover?: boolean;
+		clusterZIndexHover?: number;
+
+		geoObjectCircleOverlay?: string | ((geometry: IPixelCircleGeometry, data: object, options: object) => Promise<IOverlay>);
+		geoObjectCursor?: string;
+		geoObjectDraggable?: boolean;
+		geoObjectFill?: boolean;
+		geoObjectFillColor?: string;
+		geoObjectFillImageHref?: string;
+		geoObjectFillMethod?: "stretch" | "tile";
+		geoObjectFillOpacity?: number;
+		geoObjectHasBalloon?: boolean;
+		geoObjectHasHint?: boolean;
+		geoObjectHideIconOnBalloonOpen?: boolean;
+		geoObjectIconCaptionMaxWidth?: number;
+		geoObjectIconColor?: string;
+		geoObjectIconContentLayout?: string | IClassConstructor<ILayout>;
+		geoObjectIconContentOffset?: number[];
+		geoObjectIconContentPadding?: number[];
+		geoObjectIconContentSize?: number[];
+		geoObjectIconImageClipRect?: number[][];
+		geoObjectIconImageHref?: string;
+		geoObjectIconImageOffset?: number[];
+		geoObjectIconImageShape?: IShape | null;
+		geoObjectIconImageSize?: number[];
+		geoObjectIconLayout?: string | IClassConstructor<ILayout>;
+		geoObjectIconMaxHeight?: number;
+		geoObjectIconMaxWidth?: number;
+		geoObjectIconOffset?: number[];
+		geoObjectIconShadow?: boolean;
+		geoObjectIconShadowImageClipRect?: number[][];
+		geoObjectIconShadowImageHref?: string;
+		geoObjectIconShadowImageOffset?: number[];
+		geoObjectIconShadowImageSize?: number[];
+		geoObjectIconShadowLayout?: string | IClassConstructor<ILayout>;
+		geoObjectIconShadowOffset?: number[];
+		geoObjectInteractiveZIndex?: boolean;
+		geoObjectInteractivityModel?: InteractivityModelKey;
+		geoObjectLineStringOverlay?: OverlayKey;
+		geoObjectOpacity?: number;
+		geoObjectOpenBalloonOnClick?: boolean;
+		geoObjectOpenEmptyBalloon?: boolean;
+		geoObjectOpenEmptyHint?: boolean;
+		geoObjectOpenHintOnHover?: boolean;
+		geoObjectOutline?: boolean;
+		geoObjectPane?: string;
+		geoObjectPointOverlay?: OverlayKey;
+		geoObjectPolygonOverlay?: OverlayKey;
+		geoObjectPreset?: string;
+		geoObjectRectangleOverlay?: OverlayKey;
+		geoObjectSetMapCursorInDragging?: boolean;
+		geoObjectStrokeColor?: string[][] | string[] | string;
+		geoObjectStrokeOpacity?: number[][] | number[] | number;
+		geoObjectStrokeStyle?: string[][][] | object[][] | string[] | object[] | string | object;
+		geoObjectStrokeWidth?: number[][] | number[] | number;
+		geoObjectSyncOverlayInit?: boolean;
+		geoObjectUseMapMarginInDragging?: boolean;
+		geoObjectVisible?: boolean;
+		geoObjectZIndex?: number;
+		geoObjectZIndexActive?: number;
+		geoObjectZIndexDrag?: number;
+		geoObjectZIndexHover?: number;
 	}
 
 	export class ObjectManager implements ICustomizable, IEventEmitter, IGeoObject, IParentOnMap {

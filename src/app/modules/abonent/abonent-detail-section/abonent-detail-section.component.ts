@@ -1,4 +1,5 @@
-import { YaMap, MouseEvent, MouseEventType } from '../../../core/yandex-map/directives/map';
+import { YaMap } from '../../../core/yandex-map/directives/map';
+import { MouseEvent, MouseEventType } from '../../../core/yandex-map/interfaces/events';
 import { Component, OnInit, OnChanges, SimpleChanges, ElementRef, ViewChild, QueryList } from '@angular/core';
 import { Store } from "@ngrx/store";
 import { ApplicationState } from "../../../core/store/application-state";

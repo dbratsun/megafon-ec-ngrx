@@ -12,6 +12,7 @@ import { YaPolyline } from './directives/polyline';
 import { YaRectangle } from './directives/rectangle';
 import { YaPolygon } from "./directives/polygon";
 import { YaCircle } from "./directives/circle";
+import { YaObjectManager } from "./directives/objectmanager";
 
 export function coreDirectives() {
     return [ 
@@ -20,7 +21,8 @@ export function coreDirectives() {
         YaPolyline,
         YaRectangle,
         YaPolygon,
-        YaCircle 
+        YaCircle,
+        YaObjectManager 
     ];
 }
 
