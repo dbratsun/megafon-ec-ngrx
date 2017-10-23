@@ -11,11 +11,11 @@ export class YaObjectManager {
     @Input() clusterize: boolean = false;
     @Input() syncOverlayInit: boolean = false;
     @Input() viewportMargin: number = 128;
-    
+
     // Clusterer options
     @Input() gridSize: number = 64;
     @Input() groupByCoordinates: boolean = false;
-    // excluded @Input() hasBalloon: boolean = true;   
+    // excluded @Input() hasBalloon: boolean = true;
     // excluded @Input() hasHint: boolean = true;
     @Input() margin: number[][] | number[] = [10];
     @Input() maxZoom: number[] = [Infinity];
@@ -27,7 +27,7 @@ export class YaObjectManager {
 
     // ClusterPlacemark options
     @Input() clusterBalloonContentLayout: ymaps.BalloonContentLayoutKey = "cluster#balloonTwoColumns";
-    @Input() clusterBalloonContentLayoutHeight: number = 210; // depends on balloonContentLayout 
+    @Input() clusterBalloonContentLayoutHeight: number = 210; // depends on balloonContentLayout
     @Input() clusterBalloonContentLayoutWidth: number = 475; // depends on balloonContentLayout
     @Input() clusterBalloonItemContentLayout: string | ymaps.ILayout = "cluster#balloonTwoColumnsItemContent";
     @Input() clusterBalloonPanelContentLayout: string = null;
@@ -36,7 +36,7 @@ export class YaObjectManager {
     @Input() clusterHideIconOnBalloonOpen: boolean = true;
     @Input() clusterIconColor: string = undefined;
     @Input() clusterIconContentLayout: string = "cluster#iconContent";
-    @Input() clusterIconLayout: string = 'cluster#icon'; 
+    @Input() clusterIconLayout: string = 'cluster#icon';
     @Input() clusterIcons: ymaps.ClusterPlacemarkOptionsIconsType[] = [];
     @Input() clusterIconShape: ymaps.IGeometryJson = undefined;
     @Input() clusterInteractivityModel: ymaps.InteractivityModelKey = "default#geoObject";
@@ -46,8 +46,8 @@ export class YaObjectManager {
     @Input() clusterOpenHintOnHover: boolean = true;
     @Input() clusterZIndexHover: number = undefined;
 
-    @Input() geoObjectCircleOverlay?: string = "default#circle"; 
-    @Input() geoObjectCursor?: string = "pointer"; 
+    @Input() geoObjectCircleOverlay?: string = "default#circle";
+    @Input() geoObjectCursor?: string = "pointer";
     @Input() geoObjectDraggable?: boolean = false;
     @Input() geoObjectFill?: boolean = true;
     @Input() geoObjectFillColor?: string = "0066ff99";
@@ -112,15 +112,15 @@ export class YaObjectManager {
     @Output() overlayChange: EventEmitter<ymaps.IEvent> = new EventEmitter<ymaps.IEvent>();
     @Output() parentChange: EventEmitter<ymaps.IEvent> = new EventEmitter<ymaps.IEvent>();
     @Output() propertiesChange: EventEmitter<ymaps.IEvent> = new EventEmitter<ymaps.IEvent>();
-    
+
     @Output() mouseEvent: EventEmitter<MouseEvent> = new EventEmitter<MouseEvent>();
-    
+
     private _id: string;
     private _addedToManager: boolean = false;
 
     constructor(private _objectManager: ObjectManagerManager) {
         this._id = (managerId++).toString();
-    } 
+    }
 
     private getOptions(): ymaps.IObjectManagerOptions {
         return {
@@ -141,7 +141,7 @@ export class YaObjectManager {
     checkStatus(): boolean {
         if (!this._addedToManager) {
             const options = this.getOptions();
-            this._objectManager.add(this);
+            this._objectManager.add(this, options);
             this._objectManager.addObjectsFromJson(this, this.jsonData.toString())
             this._addedToManager = true;
             return false;
