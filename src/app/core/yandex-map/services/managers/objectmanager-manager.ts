@@ -19,7 +19,9 @@ export class ObjectManagerManager {
 
     delete(manager: YaObjectManager) {
         this._managers.get(manager).then((m) => {
-            this._mapsWrapper.removeObjectManager(m).then(() => {})
+            this._mapsWrapper.removeObjectManager(m).then(() => {
+                this._managers.delete(manager);
+            })
         });
     }
 
@@ -32,9 +34,33 @@ export class ObjectManagerManager {
         return null;
     }
 
+    setObjectsOptions(manager: YaObjectManager, key: object | string, value?: object) {
+        this._managers.get(manager).then((m) => {
+            this._mapsWrapper.setObjectManagerObjectsOptions(m, key, value);
+        })
+    }
+
+    objects(manager: YaObjectManager): ymaps.objectManager.ObjectCollection {
+        this._managers.get(manager).then((m) => {
+            return this._mapsWrapper.getObjectManagerObjects(m).then((o: ymaps.objectManager.ObjectCollection) => {
+                return o;
+            })
+        });
+        return null;
+    }
+
     addObjectsFromJson(manager: YaObjectManager, json: string) {
         this._managers.get(manager).then((m) => {
             this._mapsWrapper.addObjectsToObjectManager(m, json);
+        })
+    }
+
+    updateGeoJson(manager: YaObjectManager, geoJson: string) {
+        this._managers.get(manager).then(m => {
+            this._mapsWrapper.removeAllObjectsFromObjectManager(m).then(() => {
+                this._mapsWrapper.addObjectsToObjectManager(m, geoJson);
+            })
+
         })
     }
 

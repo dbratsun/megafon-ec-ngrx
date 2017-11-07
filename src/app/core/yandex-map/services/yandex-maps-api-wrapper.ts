@@ -186,9 +186,27 @@ export class YandexMapsAPIWrapper {
         })
     }
 
+    getObjectManagerObjects(manager: ymaps.ObjectManager): Promise<ymaps.objectManager.ObjectCollection> {
+        return this._map.then((map: ymaps.Map) => {
+            return manager.objects;
+        })
+    }
+
+    setObjectManagerObjectsOptions(manager: ymaps.ObjectManager, key: object | string, value?: object) {
+        return this._map.then((map: ymaps.Map) => {
+            manager.objects.options.set(key, value);
+        })
+    }
+
     addObjectsToObjectManager(manager: ymaps.ObjectManager, objects: string): Promise<ymaps.ObjectManager> {
         return this._map.then((map: ymaps.Map) => {
             return manager.add(objects);
+        })
+    }
+
+    removeAllObjectsFromObjectManager(manager: ymaps.ObjectManager): Promise<ymaps.ObjectManager> {
+        return this._map.then((map: ymaps.Map) => {
+            return manager.removeAll();
         })
     }
 

@@ -37,6 +37,14 @@ declare namespace ymaps {
 
 	//
 
+	// dsb, added on 07/11/2017
+	
+	const ObjectManagerObjectsCollectionTypeName = "FeatureCollection";
+	const ObjectManagerObjectTypeName = "Feature";
+	type ObjectManagerObjectTypes = "Point" | "Circle" | "Rectangle" | "LineString" | "Polygon";
+
+	//
+
 	//[number, number]
 	//[[number, number], [number, number]]
 
@@ -2499,7 +2507,6 @@ declare namespace ymaps {
 	}
 
 	// https://tech.yandex.ru/maps/doc/jsapi/2.1/dg/concepts/object-manager/frontend-docpage/
-  	// simple comment to test git
 
 	export namespace objectManager {
 
@@ -2725,6 +2732,36 @@ declare namespace ymaps {
 		setFilter(filterFunction: string);
 		setParent(parent: IControlParent | null): this;
 	}
+
+	// https://tech.yandex.ru/maps/doc/jsapi/2.1/ref/reference/ObjectManager-docpage/#add
+	export interface ObjectManagerObjectsCollection {
+		type: string;
+		features: ObjectManagerObject[];
+	}
+
+	export interface ObjectManagerObject {
+		id: number;
+		type: string;
+		geometry: ObjectManagerObjectGeometry;
+		options?: ObjectManagerObjectOptions;
+		properties?: ObjectManagerObjectProperties;
+	}
+
+	export interface ObjectManagerObjectGeometry {
+		type: string;
+		coordinates: number[] | number[][] | number[][][];
+	}
+
+	export interface ObjectManagerObjectProperties {
+		balloonContent?: string;
+		clusterCaption?: string;
+		hintContent?: string;
+	}
+
+	export interface ObjectManagerObjectOptions {
+
+	}
+
 
 	// end of 18/10/2017
 
