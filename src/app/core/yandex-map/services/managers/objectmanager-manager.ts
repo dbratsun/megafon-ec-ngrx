@@ -5,6 +5,28 @@ import { Observer } from 'rxjs/Observer';
 import { YandexMapsAPIWrapper } from "../yandex-maps-api-wrapper";
 import { YaObjectManager } from "../../directives/objectmanager";
 
+
+export function toObjects(object: ymaps.ObjectManagerObjectCore): ymaps.ObjectManagerObject {
+    return {
+        id: object.id,
+        type: "Feature",
+        geometry: object.geometry,
+        options: object.options,
+        properties: object.properties
+    }
+}
+
+export function toObjectsCollection(objects: ymaps.ObjectManagerObjectsCollectionCore): ymaps.ObjectManagerObjectsCollection {
+    let collection: ymaps.ObjectManagerObjectsCollection = {
+        type: "FeatureCollection",
+        features: new Array<ymaps.ObjectManagerObjectCore>()
+    };
+    objects.features.forEach(f => {
+        collection.features.push(toObjects(f))
+    });
+    return collection;
+}
+
 @Injectable()
 export class ObjectManagerManager {
 
@@ -34,9 +56,9 @@ export class ObjectManagerManager {
         return null;
     }
 
-    setObjectsOptions(manager: YaObjectManager, key: object | string, value?: object) {
+    setClustersOptions(manager: YaObjectManager, key: object | string, value?: object) {
         this._managers.get(manager).then((m) => {
-            this._mapsWrapper.setObjectManagerObjectsOptions(m, key, value);
+            this._mapsWrapper.setObjectManagerClustersOptions(m, key, value);
         })
     }
 
@@ -49,19 +71,87 @@ export class ObjectManagerManager {
         return null;
     }
 
+    setObjectsOptions(manager: YaObjectManager, key: object | string, value?: object) {
+        this._managers.get(manager).then((m) => {
+            this._mapsWrapper.setObjectManagerObjectsOptions(m, key, value);
+        })
+    }
+
     addObjectsFromJson(manager: YaObjectManager, json: string) {
         this._managers.get(manager).then((m) => {
             this._mapsWrapper.addObjectsToObjectManager(m, json);
         })
     }
 
-    updateGeoJson(manager: YaObjectManager, geoJson: string) {
+    addObjects(manager: YaObjectManager, objects: ymaps.ObjectManagerObjectsCollectionCore) {
+        this._managers.get(manager).then((m) => {
+            var o = toObjectsCollection(objects);
+            this._mapsWrapper.addObjectsToObjectManager(m, o);
+        })
+    }
+
+    updateObjects(manager: YaObjectManager, objects: ymaps.ObjectManagerObjectsCollectionCore) {
         this._managers.get(manager).then(m => {
             this._mapsWrapper.removeAllObjectsFromObjectManager(m).then(() => {
-                this._mapsWrapper.addObjectsToObjectManager(m, geoJson);
+                this._mapsWrapper.addObjectsToObjectManager(m, toObjectsCollection(objects));
             })
 
         })
     }
 
 }
+
+/*
+export class ObjectManagerObjectsCollectionClass implements ymaps.ObjectManagerObjectsCollection {
+    private _type: string = "FeatureCollection";
+    constructor(private _features: ObjectManagerObjectClass[]) {}
+    get type(): string {
+        return this._type;
+    }
+    get features(): ymaps.ObjectManagerObject[] {
+        let fs = new Array<ymaps.ObjectManagerObject>();
+        this._features.forEach(f => {
+            fs.push(f.to())
+        })
+        return fs;
+    }
+    to(): ymaps.ObjectManagerObjectsCollection {
+        return {
+            type: this._type,
+            features: this.features
+        }
+    }
+}
+
+export class ObjectManagerObjectClass implements ymaps.ObjectManagerObject {
+    private _type: string = "Feature";
+    constructor (private _id: number, private _geometry: ymaps.ObjectManagerObjectGeometry,
+         private _options?: ymaps.ObjectManagerObjectOptions, private _properties?: ymaps.ObjectManagerObjectProperties) {}
+    get id(): number {
+        return this._id;
+    }
+    get type(): string {
+        return this._type;
+    }
+    get geometry(): ymaps.ObjectManagerObjectGeometry {
+        return this._geometry;
+    }
+    get options(): ymaps.ObjectManagerObjectOptions {
+        return this._options;
+    }
+    get properties(): ymaps.ObjectManagerObjectProperties {
+        return this._properties;
+    }
+
+    to(): ymaps.ObjectManagerObject {
+        return {
+            id: this._id,
+            type: this._type,
+            geometry: this._geometry,
+            options: this._options,
+            properties: this._properties
+
+        }
+    }
+}
+*/

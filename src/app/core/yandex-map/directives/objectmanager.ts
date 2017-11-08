@@ -1,13 +1,23 @@
-import { Directive, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Directive, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, ViewChildren, QueryList, AfterViewInit, AfterContentInit, ContentChildren } from '@angular/core';
 import { MouseEvent, MouseEventType } from '../interfaces/events';
 import { ObjectManagerManager } from "../services/managers/objectmanager-manager";
+import { YaObjectManagerObjects } from "app/core/yandex-map/directives/objectmanager-objects";
 
 let managerId = 0;
 
-@Directive({
-    selector: 'ya-objectmanager'
+@Component({
+    selector: 'ya-objectmanager',
+    template: `
+        <div class="ya-objectmanager-inner"></div>
+        <div class="ya-objectmanager-content">
+            <ng-content></ng-content>
+        </div>
+    `
 })
-export class YaObjectManager {
+export class YaObjectManager implements AfterContentInit, OnInit, OnChanges {
+
+    @ContentChildren(YaObjectManagerObjects) objects: QueryList<YaObjectManagerObjects>;
+
     @Input() clusterize: boolean = false;
     @Input() syncOverlayInit: boolean = false;
     @Input() viewportMargin: number = 128;
@@ -124,6 +134,12 @@ export class YaObjectManager {
         this._id = (managerId++).toString();
     }
 
+    ngAfterContentInit() {
+        this.objects.forEach(m => {
+            m.setObjectManager(this); 
+        });
+    }
+
     private getOptions(): ymaps.IObjectManagerOptions {
         return {
             clusterize: this.clusterize,
@@ -163,6 +179,10 @@ export class YaObjectManager {
         this._addedToManager = true;
     }
 
+    addObjects(objects: ymaps.ObjectManagerObjectsCollectionCore) {
+        this._objectManager.addObjects(this, objects);
+    }
+
     ngOnInit() {
         if (this._addedToManager) {
             return;
@@ -174,22 +194,15 @@ export class YaObjectManager {
         if (!this._addedToManager) { 
             this.createManager();
         }
+        /*
         var geoJsonChange = changes['geoJson'];
         if (geoJsonChange) {
             this._objectManager.updateGeoJson(this, geoJsonChange.currentValue);
             this._objectManager.setObjectsOptions(this, {
                 preset: 'islands#grayIcon'
             })
-            /*
-            let oc = this._objectManager.objects(this);
-            let op = oc.options;
-            if (op) {
-                op.set({
-                    preset: 'islands#grayIcon'
-                })
-            }
-            */
         }
+        */
     }
 
     private _handleMapMouseEvents() {

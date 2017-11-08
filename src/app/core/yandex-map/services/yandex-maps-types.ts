@@ -2610,6 +2610,7 @@ declare namespace ymaps {
 	}
 
 
+
 	export interface IObjectManagerOptions extends IClustererOptions, IClusterPlacemarkOptions, IGeoObjectOptions {
 		clusterize?: boolean;
 		syncOverlayInit?: boolean;
@@ -2717,7 +2718,7 @@ declare namespace ymaps {
 		properties: IDataManager;
 		state: IDataManager;
 
-		add(objects: Object[][] | Object[] | string): ObjectManager;
+		add(objects: Object[][] | Object[] | string | ObjectManagerObjectsCollection): ObjectManager;
 		getBounds(): number[][] | null;
 		getFilter(): string | null;
 		getMap(): Map;
@@ -2734,26 +2735,35 @@ declare namespace ymaps {
 	}
 
 	// https://tech.yandex.ru/maps/doc/jsapi/2.1/ref/reference/ObjectManager-docpage/#add
-	export interface ObjectManagerObjectsCollection {
+
+	export interface ObjectManagerObjectsCollection extends ObjectManagerObjectsCollectionCore {
 		type: string;
-		features: ObjectManagerObject[];
 	}
 
-	export interface ObjectManagerObject {
-		id: number;
+	export interface ObjectManagerObjectsCollectionCore {
+		features: ObjectManagerObjectCore[];
+	}
+
+	export interface ObjectManagerObject extends ObjectManagerObjectCore{
 		type: string;
+	}
+
+	export interface ObjectManagerObjectCore {
+		id: number;
 		geometry: ObjectManagerObjectGeometry;
 		options?: ObjectManagerObjectOptions;
 		properties?: ObjectManagerObjectProperties;
 	}
 
 	export interface ObjectManagerObjectGeometry {
-		type: string;
+		type: ObjectManagerObjectTypes;
 		coordinates: number[] | number[][] | number[][][];
 	}
 
 	export interface ObjectManagerObjectProperties {
-		balloonContent?: string;
+		balloonContentHeader?: string;
+		balloonContentBody?: string;
+		balloonContentFooter?: string;
 		clusterCaption?: string;
 		hintContent?: string;
 	}
