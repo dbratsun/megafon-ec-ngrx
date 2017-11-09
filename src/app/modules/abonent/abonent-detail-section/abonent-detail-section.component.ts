@@ -100,6 +100,65 @@ export class AbonentDetailSectionComponent implements OnInit {
     }
   }
 
+  jsonData4: ymaps.ObjectManagerObjectsCollectionCore = {
+    features: [
+      {
+        id: 2,
+        geometry: {
+          type: "Point", 
+          coordinates: [55.775724, 37.56084]
+        },
+        properties: {
+          balloonContentHeader: "<font size=3><b><a target='_blank' href='https://yandex.ru'>Здесь может быть ваша ссылка</a></b></font>", 
+          balloonContentBody: "<p>Ваше имя: <input name='login'></p><p><em>Телефон в формате 2xxx-xxx:</em>  <input></p><p><input type='submit' value='Отправить'></p>", 
+          balloonContentFooter: "<font size=1>Информация предоставлена: </font> <strong>этим балуном</strong>",
+          clusterCaption: "<strong><s>Еще</s> одна</strong> метка",
+          hintContent: "<strong>Текст  <s>подсказки</s></strong>"    
+        }
+      },
+      {
+        id: 3,
+        geometry: {
+          type: "Point", 
+          coordinates: [55.744522, 37.616378]
+        },
+        properties: {
+          balloonContentHeader: "<font size=3><b><a target='_blank' href='https://yandex.ru'>Здесь может быть ваша ссылка</a></b></font>", 
+          balloonContentBody: "<p>Ваше имя: <input name='login'></p><p><em>Телефон в формате 2xxx-xxx:</em>  <input></p><p><input type='submit' value='Отправить'></p>", 
+          balloonContentFooter: "<font size=1>Информация предоставлена: </font> <strong>этим балуном</strong>",
+          clusterCaption: "<strong><s>Еще</s> одна</strong> метка",
+          hintContent: "<strong>Текст  <s>подсказки</s></strong>"    
+        }
+      },
+      {
+        id: 4,
+        geometry: {
+          type: "Point", 
+          coordinates: [55.780898, 37.642889]
+        },
+        properties: {
+          balloonContentHeader: "<font size=3><b><a target='_blank' href='https://yandex.ru'>Здесь может быть ваша ссылка</a></b></font>", 
+          balloonContentBody: "<p>Ваше имя: <input name='login'></p><p><em>Телефон в формате 2xxx-xxx:</em>  <input></p><p><input type='submit' value='Отправить'></p>", 
+          balloonContentFooter: "<font size=1>Информация предоставлена: </font> <strong>этим балуном</strong>",
+          clusterCaption: "<strong><s>Еще</s> одна</strong> метка",
+          hintContent: "<strong>Текст  <s>подсказки</s></strong>"    
+        },
+        options: {
+          preset: "islands#redIcon"
+        }
+      }      
+    ]
+  };
+
+  jsonData3: ymaps.ObjectManagerObjectsCollectionCore = {
+    "features": [
+        { "id": 2, "geometry": {"type": "Point", "coordinates": [55.763338, 37.565466]}, "properties": {"balloonContentHeader": "<font size=3><b><a target='_blank' href='https://yandex.ru'>Здесь может быть ваша ссылка</a></b></font>", "balloonContentBody": "<p>Ваше имя: <input name='login'></p><p><em>Телефон в формате 2xxx-xxx:</em>  <input></p><p><input type='submit' value='Отправить'></p>", "balloonContentFooter": "<font size=1>Информация предоставлена: </font> <strong>этим балуном</strong>", "clusterCaption": "<strong><s>Еще</s> одна</strong> метка", "hintContent": "<strong>Текст  <s>подсказки</s></strong>"}},
+        { "id": 3, "geometry": {"type": "Point", "coordinates": [55.744522, 37.616378]}, "properties": {"balloonContentHeader": "<font size=3><b><a target='_blank' href='https://yandex.ru'>Здесь может быть ваша ссылка</a></b></font>", "balloonContentBody": "<p>Ваше имя: <input name='login'></p><p><em>Телефон в формате 2xxx-xxx:</em>  <input></p><p><input type='submit' value='Отправить'></p>", "balloonContentFooter": "<font size=1>Информация предоставлена: </font> <strong>этим балуном</strong>", "clusterCaption": "<strong><s>Еще</s> одна</strong> метка", "hintContent": "<strong>Текст  <s>подсказки</s></strong>"}},
+        { "id": 4, "geometry": {"type": "Point", "coordinates": [55.780898, 37.642889]}, "properties": {"balloonContentHeader": "<font size=3><b><a target='_blank' href='https://yandex.ru'>Здесь может быть ваша ссылка</a></b></font>", "balloonContentBody": "<p>Ваше имя: <input name='login'></p><p><em>Телефон в формате 2xxx-xxx:</em>  <input></p><p><input type='submit' value='Отправить'></p>", "balloonContentFooter": "<font size=1>Информация предоставлена: </font> <strong>этим балуном</strong>", "clusterCaption": "<strong><s>Еще</s> одна</strong> метка", "hintContent": "<strong>Текст  <s>подсказки</s></strong>"}},
+    ]    
+  }    
+
+
   jsonData2: ymaps.ObjectManagerObjectsCollectionCore = {
     features: [
       {

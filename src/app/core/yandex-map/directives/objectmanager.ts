@@ -30,7 +30,7 @@ export class YaObjectManager implements AfterContentInit, OnInit, OnChanges {
     @Input() margin: number[][] | number[] = [10];
     @Input() maxZoom: number[] = [Infinity];
     @Input() minClusterSize: number = 2;
-    @Input() preset: ymaps.PresetKey = "";
+    @Input() preset: ymaps.PresetKey | string = "";
     @Input() showInAlphabeticalOrder: boolean = false;
     @Input() useMapMargin: boolean = true;
     @Input() zoomMargin: number[][] | number[] = [0];
@@ -138,6 +138,7 @@ export class YaObjectManager implements AfterContentInit, OnInit, OnChanges {
         this.objects.forEach(m => {
             m.setObjectManager(this); 
         });
+        this._objectManager.addToMap(this);
     }
 
     private getOptions(): ymaps.IObjectManagerOptions {
@@ -152,8 +153,17 @@ export class YaObjectManager implements AfterContentInit, OnInit, OnChanges {
             preset: this.preset,
             showInAlphabeticalOrder: this.showInAlphabeticalOrder,
             useMapMargin: this.useMapMargin,
-            zoomMargin: this.zoomMargin
+            zoomMargin: this.zoomMargin,
+            geoObjectOpenBalloonOnClick: this.geoObjectOpenBalloonOnClick
         }
+    }
+
+    setObjectsOptions(options: ymaps.objectManager.IObjectCollectionOptions) {
+        this._objectManager.setObjectsOptions(this, options);
+    }
+
+    setObjectOptions(objectId: number, options: object) {
+        this._objectManager.setObjectOptions(this, objectId, options);
     }
 
     /*
@@ -175,12 +185,13 @@ export class YaObjectManager implements AfterContentInit, OnInit, OnChanges {
         }
         const options = this.getOptions();
         this._objectManager.add(this, options);
+        // this._objectManager.setObjectsOptions(this, options);
             // this._objectManager.addObjectsFromJson(this, this.jsonData.toString())
         this._addedToManager = true;
     }
 
-    addObjects(objects: ymaps.ObjectManagerObjectsCollectionCore) {
-        this._objectManager.addObjects(this, objects);
+    addObjects(objects: ymaps.ObjectManagerObjectsCollectionCore, options?: ymaps.objectManager.IObjectCollectionOptions) {
+        this._objectManager.addObjects(this, objects, options);
     }
 
     ngOnInit() {

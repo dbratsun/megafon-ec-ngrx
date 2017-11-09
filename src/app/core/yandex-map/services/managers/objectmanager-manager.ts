@@ -34,9 +34,19 @@ export class ObjectManagerManager {
 
     constructor(protected _mapsWrapper: YandexMapsAPIWrapper, protected _zone: NgZone) { }
     
-    add(manager: YaObjectManager, options?: ymaps.IObjectManagerOptions) {
-        const managerPromise = this._mapsWrapper.createObjectManager(options);
+    add(manager: YaObjectManager, options?: ymaps.IObjectManagerOptions, objects?: ymaps.ObjectManagerObjectsCollectionCore) {
+        var ob: ymaps.ObjectManagerObjectsCollection = null;
+        if (objects) {
+            let ob = toObjectsCollection(objects);
+        }
+        const managerPromise = this._mapsWrapper.createObjectManager(options, ob);
         this._managers.set(manager, managerPromise);
+    }
+
+    addToMap(manager: YaObjectManager) {
+        this._managers.get(manager).then((m) => {
+            this._mapsWrapper.addObjectManagerToMap(m);
+        })
     }
 
     delete(manager: YaObjectManager) {
@@ -77,16 +87,25 @@ export class ObjectManagerManager {
         })
     }
 
+    setObjectOptions(manager: YaObjectManager, objectId: number, options: object) {
+        this._managers.get(manager).then((m) => {
+            this._mapsWrapper.setObjectManagerObjectOptions(m, objectId, options);
+        })
+    }
+
     addObjectsFromJson(manager: YaObjectManager, json: string) {
         this._managers.get(manager).then((m) => {
             this._mapsWrapper.addObjectsToObjectManager(m, json);
         })
     }
 
-    addObjects(manager: YaObjectManager, objects: ymaps.ObjectManagerObjectsCollectionCore) {
+    addObjects(manager: YaObjectManager, objects: ymaps.ObjectManagerObjectsCollectionCore, options?: ymaps.objectManager.IObjectCollectionOptions) {
         this._managers.get(manager).then((m) => {
             var o = toObjectsCollection(objects);
             this._mapsWrapper.addObjectsToObjectManager(m, o);
+            if (options) {
+                this._mapsWrapper.setObjectManagerObjectsOptions(m, options);
+            }
         })
     }
 

@@ -165,11 +165,24 @@ export class YandexMapsAPIWrapper {
 
     // ObjectManager
 
-    createObjectManager(options?: ymaps.IObjectManagerOptions) {
+    createObjectManager(options?: ymaps.IObjectManagerOptions, objects?: ymaps.ObjectManagerObjectsCollection) {
         return this._map.then((map: ymaps.Map) => {
-            let om = new ymaps.ObjectManager(options);
-            map.geoObjects.add(om);
+            var om: ymaps.ObjectManager = new ymaps.ObjectManager(options);
+            // var om: ymaps.ObjectManager = new ymaps.ObjectManager({geoObjectOpenBalloonOnClick: "false"});
+            var o = options;
+            var g = om.options.get("preset", null);
+            if (objects) {
+                om.add(objects);
+            }
+            // map.geoObjects.add(om);
+            // let ob = om.objects.getAll();
             return om;
+        })
+    }
+
+    addObjectManagerToMap(manager: ymaps.ObjectManager) {
+        return this._map.then((map: ymaps.Map) => {
+            map.geoObjects.add(manager);
         })
     }
 
@@ -195,6 +208,15 @@ export class YandexMapsAPIWrapper {
     setObjectManagerObjectsOptions(manager: ymaps.ObjectManager, key: object | string, value?: object) {
         return this._map.then((map: ymaps.Map) => {
             manager.objects.options.set(key, value);
+        })
+    }
+
+    setObjectManagerObjectOptions(manager: ymaps.ObjectManager, objectId: number, options: object) {
+        return this._map.then((map: ymaps.Map) => {
+            var obj: object = manager.objects.getById(objectId);
+            let o1 = manager.objects.options.get("hasBalloon", null);
+            manager.objects.setObjectOptions(obj, options);
+            let o2 = manager.objects.options.get("hasBalloon", null);
         })
     }
 

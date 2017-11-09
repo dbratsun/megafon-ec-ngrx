@@ -28,7 +28,7 @@ declare namespace ymaps {
 
 	// deleted: type PresetKey = string; //option.presetStorage
 
-	type PresetKey = "" |
+	type PresetKey = string | "" |
 		"islands#blueIcon" | "islands#redIcon" | "islands#darkOrangeIcon" | "islands#nightIcon" | "islands#darkBlueIcon" | "islands#pinkIcon" |
 		"islands#grayIcon" | "islands#brownIcon" | "islands#darkGreenIcon" | "islands#violetIcon" | "islands#blackIcon" | "islands#yellowIcon" |
 		"islands#greenIcon" | "islands#orangeIcon" | "islands#lightBlueIcon" | "islands#oliveIcon"
@@ -2571,6 +2571,13 @@ declare namespace ymaps {
 			setData(objectData: Object): Promise<ObjectManager>;
 			setOptions(options: object): Promise<ObjectManager>;
 			setPosition(position: number[]): Promise<ObjectManager>;
+		}
+
+		export interface IObjectCollectionOptions {
+			hasBalloon?: boolean;
+			hasHint?: boolean;
+			hideIconOnBalloonOpen?: boolean;
+			openBalloonOnClick?: boolean; 
 		}
 
 		export class ObjectCollection implements ICollection, ICustomizable{

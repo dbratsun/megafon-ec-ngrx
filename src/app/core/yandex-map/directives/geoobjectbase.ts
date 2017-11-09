@@ -15,6 +15,8 @@ export abstract class YaGeoObjectBase implements IGeoObjectBase, OnDestroy, DoCh
     private _addedToManager: boolean = false;
     private _observableSubscriptions: Subscription[] = [];
     
+    @Input() strokeColor: string;
+
     constructor(protected _geoObjectManager: GeoObjectManagerBase) {
         this._id = (geoObjectId++).toString();
     }

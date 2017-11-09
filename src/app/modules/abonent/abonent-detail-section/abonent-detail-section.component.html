@@ -60,8 +60,10 @@
         <ya-polygon [geometry]="[[[55.75, 37.50],[55.75, 37.71],[55.70, 37.70]],[[55.73, 37.58],[55.72, 37.70],[55.70, 37.70]]]"></ya-polygon>
         -->
         <!-- [geoJson]="jsonData1" -->
-        <ya-objectmanager clusterize="true" preset="islands#redIcon" minClusterSize="3" [geoJson]="jsonData1">
+        <ya-objectmanager 
+            [clusterize]="true" [minClusterSize]="3" [preset]="'islands#redDotIcon'" [geoJson]="jsonData1" [geoObjectOpenBalloonOnClick]="true">
           <ya-objectmanager-objects [objects]="jsonData2"></ya-objectmanager-objects>  
+          <ya-objectmanager-objects [objects]="jsonData4" [hasBalloon]="false" [openBalloonOnClick]="false"></ya-objectmanager-objects>  
         </ya-objectmanager>
       </ya-map>
   </div>
