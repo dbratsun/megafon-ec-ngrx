@@ -103,7 +103,7 @@ export class AbonentDetailSectionComponent implements OnInit {
   jsonData4: ymaps.ObjectManagerObjectsCollectionCore = {
     features: [
       {
-        id: 2,
+        id: 0,
         geometry: {
           type: "Point", 
           coordinates: [55.775724, 37.56084]
@@ -113,11 +113,16 @@ export class AbonentDetailSectionComponent implements OnInit {
           balloonContentBody: "<p>Ваше имя: <input name='login'></p><p><em>Телефон в формате 2xxx-xxx:</em>  <input></p><p><input type='submit' value='Отправить'></p>", 
           balloonContentFooter: "<font size=1>Информация предоставлена: </font> <strong>этим балуном</strong>",
           clusterCaption: "<strong><s>Еще</s> одна</strong> метка",
-          hintContent: "<strong>Текст  <s>подсказки</s></strong>"    
+          hintContent: "<strong>ID: 2</strong>"    
+        },
+        options: {
+          preset: "islands#redIcon",
+          opacity: 0.1,
+          fillColor: '#FFFFFF'
         }
       },
       {
-        id: 3,
+        id: 1,
         geometry: {
           type: "Point", 
           coordinates: [55.744522, 37.616378]
@@ -127,11 +132,14 @@ export class AbonentDetailSectionComponent implements OnInit {
           balloonContentBody: "<p>Ваше имя: <input name='login'></p><p><em>Телефон в формате 2xxx-xxx:</em>  <input></p><p><input type='submit' value='Отправить'></p>", 
           balloonContentFooter: "<font size=1>Информация предоставлена: </font> <strong>этим балуном</strong>",
           clusterCaption: "<strong><s>Еще</s> одна</strong> метка",
-          hintContent: "<strong>Текст  <s>подсказки</s></strong>"    
+          hintContent: "<strong>Текст <s>подсказки</s></strong>"    
+        },
+        options: {
+          preset: "islands#greenIcon"
         }
       },
       {
-        id: 4,
+        id: 2,
         geometry: {
           type: "Point", 
           coordinates: [55.780898, 37.642889]
@@ -144,9 +152,72 @@ export class AbonentDetailSectionComponent implements OnInit {
           hintContent: "<strong>Текст  <s>подсказки</s></strong>"    
         },
         options: {
-          preset: "islands#redIcon"
+          preset: "islands#blueIcon"
         }
-      }      
+      },
+      {
+        id: 3,
+        geometry: {
+          type: "Circle", 
+          coordinates: [55.764286, 37.606169],
+          radius: 800
+        }
+      },
+      {
+        id: 4,
+        geometry: {
+          type: "Rectangle",
+          coordinates: [
+            [55.764286, 37.606169],
+            [55.759688, 37.620588]
+          ]
+        },
+        options: {
+          fillColor: '#FFF000',
+          opacity: 0.9
+        }
+      },
+      {
+        id: 5,
+        geometry: {
+            type: 'Polygon',
+            coordinates: [[
+                [55.75175065, 37.6041094],
+                [55.75005637, 37.6137224],
+                [55.742891186, 37.6166407],
+                [55.74153546, 37.60342281],
+                [55.74700649, 37.59775798]
+            ]]
+        },
+        options: {
+            opacity: 0.2,
+            strokeWidth: 2,
+            fillColor: '#00FF00'
+        }
+      },
+      {
+        id: 6,
+        geometry: {
+          type: 'LineString',
+          coordinates: [
+            [
+              55.80899899270488,
+              37.77442932128906
+            ],
+            [
+              55.800895029938275,
+              37.74696350097656
+            ],
+            [
+              55.795877445664104,
+              37.709197998046875
+            ]
+          ]
+        },
+        options: {
+          strokeWidth: 3
+        }
+      }        
     ]
   };
 
@@ -162,31 +233,14 @@ export class AbonentDetailSectionComponent implements OnInit {
   jsonData2: ymaps.ObjectManagerObjectsCollectionCore = {
     features: [
       {
-        id: 0,
+        id: 33,
         geometry: {
-          type: "Point", 
-          coordinates: [55.831903, 37.411961]
+          type: "Circle", 
+          coordinates: [55.780000, 37.626169],
+          radius: 300
         },
-        properties: {
-          balloonContentHeader: "<font size=3><b><a target='_blank' href='https://yandex.ru'>Здесь может быть ваша ссылка</a></b></font>", 
-          balloonContentBody: "<p>Ваше имя: <input name='login'></p><p><em>Телефон в формате 2xxx-xxx:</em>  <input></p><p><input type='submit' value='Отправить'></p>", 
-          balloonContentFooter: "<font size=1>Информация предоставлена: </font> <strong>этим балуном</strong>",
-          clusterCaption: "<strong><s>Еще</s> одна</strong> метка",
-          hintContent: "<strong>Текст  <s>подсказки</s></strong>"    
-        }
-      },
-      {
-        id: 1,
-        geometry: {
-          type: "Point", 
-          coordinates: [55.763338, 37.565466]
-        },
-        properties: {
-          balloonContentHeader: "<font size=3><b><a target='_blank' href='https://yandex.ru'>Здесь может быть ваша ссылка</a></b></font>", 
-          balloonContentBody: "<p>Ваше имя: <input name='login'></p><p><em>Телефон в формате 2xxx-xxx:</em>  <input></p><p><input type='submit' value='Отправить'></p>", 
-          balloonContentFooter: "<font size=1>Информация предоставлена: </font> <strong>этим балуном</strong>",
-          clusterCaption: "<strong><s>Еще</s> одна</strong> метка",
-          hintContent: "<strong>Текст  <s>подсказки</s></strong>"    
+        options: {
+          opacity: 0.5
         }
       }
     ]

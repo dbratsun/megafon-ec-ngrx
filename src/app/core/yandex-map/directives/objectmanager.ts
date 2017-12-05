@@ -17,8 +17,8 @@ let managerId = 0;
 export class YaObjectManager implements AfterContentInit, OnInit, OnChanges {
 
     @ContentChildren(YaObjectManagerObjects) objects: QueryList<YaObjectManagerObjects>;
-
-    @Input() clusterize: boolean = false;
+   
+    @Input() clusterize: boolean = false;           // work only for point objects, all other (non-point) onbjects will be ignored !!!
     @Input() syncOverlayInit: boolean = false;
     @Input() viewportMargin: number = 128;
 

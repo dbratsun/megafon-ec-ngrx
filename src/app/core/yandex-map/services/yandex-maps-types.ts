@@ -2765,6 +2765,7 @@ declare namespace ymaps {
 	export interface ObjectManagerObjectGeometry {
 		type: ObjectManagerObjectTypes;
 		coordinates: number[] | number[][] | number[][][];
+		radius?: number;
 	}
 
 	export interface ObjectManagerObjectProperties {

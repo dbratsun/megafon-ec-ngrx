@@ -208,6 +208,10 @@ export class YandexMapsAPIWrapper {
     setObjectManagerObjectsOptions(manager: ymaps.ObjectManager, key: object | string, value?: object) {
         return this._map.then((map: ymaps.Map) => {
             manager.objects.options.set(key, value);
+            manager.objects.options.set({
+                strokeWidth: 4,
+                preset: "islands#redIcon"                
+            })
         })
     }
 
@@ -215,8 +219,14 @@ export class YandexMapsAPIWrapper {
         return this._map.then((map: ymaps.Map) => {
             var obj: object = manager.objects.getById(objectId);
             let o1 = manager.objects.options.get("hasBalloon", null);
-            manager.objects.setObjectOptions(obj, options);
-            let o2 = manager.objects.options.get("hasBalloon", null);
+            manager.objects.setObjectOptions(objectId, options);
+            /*
+            manager.objects.setObjectOptions(objectId, {
+                fillColor: "fff000"
+            });
+            let o2 = manager.objects.getById(objectId);
+            let o3 = manager.objects.options.get("hasBalloon", null);
+            */
         })
     }
 
@@ -228,7 +238,9 @@ export class YandexMapsAPIWrapper {
 
     addObjectsToObjectManager(manager: ymaps.ObjectManager, objects: string | ymaps.ObjectManagerObjectsCollection): Promise<ymaps.ObjectManager> {
         return this._map.then((map: ymaps.Map) => {
-            return manager.add(objects);
+            let om = manager.add(objects);
+            let os = manager.objects.getAll();
+            return om;
         })
     }
 

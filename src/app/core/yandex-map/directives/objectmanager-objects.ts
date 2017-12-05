@@ -28,7 +28,7 @@ export class YaObjectManagerObjects implements OnChanges {
     setObjectManager(objectManager: YaObjectManager) {
         this.objectManager = objectManager;
         if ((this.objects) && (!this.added)) {
-            this.objectManager.addObjects(this.objects);
+            this.objectManager.addObjects(this.objects, this.getOptions());
             if (!this.isDefaultOptions()) {
                 this.setOptionsToAllObjects();
             }

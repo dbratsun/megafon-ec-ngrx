@@ -61,9 +61,9 @@
         -->
         <!-- [geoJson]="jsonData1" -->
         <ya-objectmanager 
-            [clusterize]="true" [minClusterSize]="3" [preset]="'islands#redDotIcon'" [geoJson]="jsonData1" [geoObjectOpenBalloonOnClick]="true">
+            [clusterize]="false" [minClusterSize]="3" [preset]="'islands#redDotIcon'" [geoJson]="jsonData1" [geoObjectOpenBalloonOnClick]="true">
           <ya-objectmanager-objects [objects]="jsonData2"></ya-objectmanager-objects>  
-          <ya-objectmanager-objects [objects]="jsonData4" [hasBalloon]="false" [openBalloonOnClick]="false"></ya-objectmanager-objects>  
+          <ya-objectmanager-objects [objects]="jsonData4" [hasBalloon]="true" [openBalloonOnClick]="true"></ya-objectmanager-objects>  
         </ya-objectmanager>
       </ya-map>
   </div>
